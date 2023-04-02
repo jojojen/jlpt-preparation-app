@@ -7,8 +7,8 @@ import { environment } from '../environments/environment.openai';
 })
 export class Gpt3Service {
   private apiKey: string = environment.openaiApiKey;
-  private prompt = `JLPT N3の語彙を使って自然でわかりやすい選択肢付きの日常会話の問題を作成してください。ただし、問題には選択肢の答えを含めないでください。生成される2つの選択肢は、1つは常識や文法に合致し、もう1つは常識や文法に合致しないものにしてください。 
-  punctuations format must be the same as eaxmple below:
+  private prompt = `JLPT N3の語彙を使って自然でわかりやすい選択肢付きの日常会話の問題を作成してください。また、問題文と選択肢に重複する単語を避けてください。生成される2つの選択肢は、1つは常識や文法に合致し、もう1つは常識や文法に合致しないものにしてください。解答として選ばれる選択肢は、常識に適合し、文法にも従っている必要があります。 
+  brackets, quotation marks, colons format must be the same as eaxmple below:
   {
     "text": "後輩「おかわりを注文しましょうか。」 先輩「いや、もう間に合っているよ。」 間に合っている＝？",
     "options": [

@@ -56,25 +56,25 @@ export class AppComponent {
         const randomNumber = Math.random() * 100;
         if (randomNumber < 79) {
           this.resultImage = 'assets/feedback/correct_r.png';
-          this.resultDescription = '答對了！(稀有度:R)';
+          this.resultDescription = '正解です！(レアリティ:R)';
         } else if (randomNumber >= 79 && randomNumber < 97) {
           this.resultImage = 'assets/feedback/correct_sr.png';
-          this.resultDescription = '答對了！(稀有度:SR)';
+          this.resultDescription = '正解です！(レアリティ:SR)';
         } else {
           this.resultImage = 'assets/feedback/correct_ssr.png';
-          this.resultDescription = '答對了！(稀有度:SSR)';
+          this.resultDescription = '正解です！(レアリティ:SSR)';
         }
       } else {
         const randomNumber = Math.random() * 100;
         if (randomNumber < 79) {
           this.resultImage = 'assets/feedback/incorrect_r.png';
-          this.resultDescription = '答錯了！(稀有度:R)';
+          this.resultDescription = '間違いました！(レアリティ:R)';
         } else if (randomNumber >= 79 && randomNumber < 97) {
           this.resultImage = 'assets/feedback/incorrect_sr.png';
-          this.resultDescription = '答錯了！(稀有度:SR)';
+          this.resultDescription = '間違いました！(レアリティ:SR)';
         } else {
           this.resultImage = 'assets/feedback/incorrect_ssr.png';
-          this.resultDescription = '答錯了！(稀有度:SSR)';
+          this.resultDescription = '間違いました！(レアリティ:SSR)';
         }
       }
     }, 1000);
