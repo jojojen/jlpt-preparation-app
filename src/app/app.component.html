@@ -1,9 +1,10 @@
 <div class="container">
     <button (click)="generateQuestion()">產生問題</button>
+    <div *ngIf="isLoading" class="loader"></div>
     <div *ngIf="question">
         <p>{{ question }}</p>
         <ol>
-            <li *ngFor="let option of options" (click)="selectAnswer(option)" [class.selected]="option === selectedAnswer">{{ option }}</li>
+            <li *ngFor="let option of options" (click)="selectAnswer(option)" [class.selected]="option.id === selectedAnswer">{{ option.text }}</li>
         </ol>
         <button *ngIf="selectedAnswer && !hideSubmitButton" (click)="submitAnswer()">送出答案</button>
         <div *ngIf="isLoading" class="loader"></div>
@@ -13,4 +14,3 @@
         </div>
     </div>
 </div>
-  

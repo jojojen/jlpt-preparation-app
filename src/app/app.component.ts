@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
+import { Gpt3Service } from './gpt-3.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   question: string = '';
-  options: string[] = [];
+  options: {id: string, text: string}[] = [];
   correctAnswer: string = '';
   showAnswer: boolean = false;
   resultImage: string = '';
@@ -16,22 +17,31 @@ export class AppComponent {
   hideSubmitButton = false;
   isLoading: boolean = false;
 
-  generateQuestion() {
+  constructor(private gpt3Service: Gpt3Service) {}
+
+  async generateQuestion() {
+    this.isLoading = true;
     this.showAnswer = false;
     this.hideSubmitButton = false;
     this.resultImage = '';
     this.selectedAnswer = '';
-    this.question =
-      '後輩「おかわりを注文しましょうか。」\n先輩「いや、もう間に合っているよ。」\n間に合っている＝？';
-    this.options = [
-      '時間通りに来る',
-      '十分である',
-    ];
-    this.correctAnswer = '十分である';
+
+    try {
+      const resultText = await this.gpt3Service.callGpt3Api();
+      const result = JSON.parse(resultText);
+
+      this.question = result.text;
+      this.options = result.options;
+      this.correctAnswer = result.answer;
+
+      this.isLoading = false;
+    } catch (error) {
+      console.error('Error generating question:', error);
+    }
   }
 
-  selectAnswer(answer: string) {
-    this.selectedAnswer = answer;
+  selectAnswer(answer: {id: string, text: string}) {
+    this.selectedAnswer = answer.id;
   }
 
   submitAnswer() {
