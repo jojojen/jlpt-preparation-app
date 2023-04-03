@@ -14,7 +14,7 @@ export class Gpt3Service {
   4. 正解は常識・文法に従っていること。
   6. 選択肢の区別が明確であること。
   7. 選択肢は文脈に適したものを含める。
-  8. output format including brackets, double quotation marks, colons must be the same as eaxmple below:
+  8. output must be json format, eaxmple below:
   {
     "text": "「出発する日、 ___ にたくさんの友達が来てくれた",
     "options": [
