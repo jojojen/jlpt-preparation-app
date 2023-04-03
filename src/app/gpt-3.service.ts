@@ -7,20 +7,19 @@ import { environment } from '../environments/environment.openai';
 })
 export class Gpt3Service {
   private apiKey: string = environment.openaiApiKey;
-  private prompt = `日常会話で使用される日本語を大まかに理解できるかどうかを評価する問題を作成してください。
-  問題文と選択肢は以下の条件に合わせる必要があります:
-  1. 日常生活で使用される日本語または新聞の見出しで使用される日本語。
-  2. 問題文と選択肢に重複する単語を避けてください。
-  3. 生成される2つの選択肢は、1つは常識や文法に合致し、もう一つの選択肢は、常識や文法に反していなければなりません。
-  4. 解答として選ばれる選択肢は、常識に適合し、文法にも従っている必要があります。
-  5. 誤った選択肢は常識や文法に合致しないものにしてください。
-  6. 生成される問題は、正しい選択肢と誤った選択肢の区別が明確でなければならない。
-  7. output format including brackets, double quotation marks, colons must be the same as eaxmple below:
+  private prompt = `日常会話で使われる日本語を理解するための問題を作成してください。条件は以下の通りです。:
+  1. 日常生活の日本語を使用する。
+  2. 問題文の単語を選択肢にそのまま使わない。
+  3. 2つの選択肢のうち1つは常識・文法に合致し、もう1つは合わないものとする。
+  4. 正解は常識・文法に従っていること。
+  6. 選択肢の区別が明確であること。
+  7. 選択肢は文脈に適したものを含める。
+  8. output format including brackets, double quotation marks, colons must be the same as eaxmple below:
   {
-    "text": "「昨日、友達と_____を見ました。」この空欄に最も適切な言葉は何ですか?",
+    "text": "「出発する日、 ___ にたくさんの友達が来てくれた",
     "options": [
-      { "id": "A", "text": "トマト" },
-      { "id": "B", "text": "映画" }
+      { "id": "A", "text": "見聞き" },
+      { "id": "B", "text": "見送り" }
     ],
     "answer": "B"
   }`;
