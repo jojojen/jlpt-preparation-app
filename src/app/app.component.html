@@ -9,6 +9,7 @@
     The request limit of 10 times per hour has been reached.<br>
     Please wait for an hour before trying again.
   </div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
     <div *ngIf="isLoading" class="loader"></div>
     <div *ngIf="question">
       <p>{{ question }}</p>

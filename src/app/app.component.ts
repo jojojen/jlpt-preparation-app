@@ -20,10 +20,12 @@ export class AppComponent {
   disableGenerateQuestionButton = false;
   disableSubmitAnswerButton = true;
   requestLimitReached = false;
+  errorMessage: string = '';
 
   constructor(private gpt3Service: Gpt3Service) {}
 
   async generateQuestion() {
+    
     console.log('generateQuestion called');
     this.countRequests();
     if (this.requestLimitReached) {
@@ -39,7 +41,9 @@ export class AppComponent {
     this.selectedAnswer = '';
 
     try {
-      const resultText = await this.gpt3Service.callGpt3Api();
+      // const resultText = await this.gpt3Service.callGpt3Api();
+      const { resultText, error } = await this.gpt3Service.callGpt3Api();
+      console.log("resultText:" + resultText);
       const result = JSON.parse(resultText);
 
       this.question = result.text;
@@ -50,6 +54,8 @@ export class AppComponent {
       this.disableOptions = false;
     } catch (error) {
       console.error('Error generating question:', error);
+      this.errorMessage = 'Something go wrong, please try later.';
+      this.isLoading = false;
     }
   }
 
@@ -96,7 +102,7 @@ export class AppComponent {
         }
       }
       this.disableGenerateQuestionButton = false;
-    }, 1000);
+    }, 500);
   }
 
   // Add this function to count requests and apply limits

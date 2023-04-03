@@ -14,7 +14,7 @@ export class Gpt3Service {
   4. 正解は常識・文法に従っていること。
   6. 選択肢の区別が明確であること。
   7. 選択肢は文脈に適したものを含める。
-  8. output must be json format, eaxmple below:
+  8. your output MUST be json format, json eaxmple is below:
   {
     "text": "「出発する日、 ___ にたくさんの友達が来てくれた",
     "options": [
@@ -26,7 +26,7 @@ export class Gpt3Service {
 
   constructor() {}
 
-  async callGpt3Api(): Promise<string> {
+  async callGpt3Api(): Promise<{resultText: string, error: string}> {
     try {
       const response = await axios.post(
         'https://api.openai.com/v1/engines/text-davinci-003/completions',
@@ -35,7 +35,7 @@ export class Gpt3Service {
           max_tokens: 300,
           n: 1,
           stop: null,
-          temperature: 0.5,
+          temperature: 0.6,
         },
         {
           headers: {
@@ -47,22 +47,19 @@ export class Gpt3Service {
   
       if (response.data.choices && response.data.choices.length > 0) {
         const choice = response.data.choices[0];
-  
         console.log('GPT-3 response text:', choice.text);
         let parsedText;
         try {
           parsedText = JSON.parse(choice.text);
+          return { resultText: JSON.stringify(parsedText), error: '' };
         } catch (error) {
-          throw new Error('GPT-3 response is not valid JSON');
+          console.error('Error fetching GPT-3 response:', error);
+          return { resultText: '', error: (error as Error).message };
         }
-  
-        return parsedText ? JSON.stringify(parsedText) : '';
       }
     } catch (error) {
       console.error('Error fetching GPT-3 response:', error);
     }
-  
-    return '';
+    return { resultText: '', error: '' };
   }
-  
 }
