@@ -16,12 +16,14 @@ export class AppComponent {
   resultDescription: string = '';
   hideSubmitButton = false;
   isLoading: boolean = false;
+  disableOptions: boolean = false;
   disableGenerateQuestionButton = false;
   disableSubmitAnswerButton = true;
 
   constructor(private gpt3Service: Gpt3Service) {}
 
   async generateQuestion() {
+    this.disableOptions = true;
     this.isLoading = true;
     this.disableGenerateQuestionButton = true;
     this.showAnswer = false;
@@ -38,14 +40,17 @@ export class AppComponent {
       this.correctAnswer = result.answer;
 
       this.isLoading = false;
+      this.disableOptions = false;
     } catch (error) {
       console.error('Error generating question:', error);
     }
   }
 
   selectAnswer(answer: {id: string, text: string}) {
-    this.selectedAnswer = answer.id;
-    this.disableSubmitAnswerButton = false;
+    if (!this.disableOptions) {
+      this.selectedAnswer = answer.id;
+      this.disableSubmitAnswerButton = false;
+    }
   }
 
   submitAnswer() {
@@ -53,6 +58,7 @@ export class AppComponent {
     this.hideSubmitButton = true;
     this.isLoading = true;
     this.disableSubmitAnswerButton = false;
+    this.disableOptions = true;
 
     setTimeout(() => {
       this.isLoading = false;

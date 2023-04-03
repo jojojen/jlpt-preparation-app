@@ -60,6 +60,15 @@ li:hover {
   background-color: #d1d1d1;
 }
 
+li.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+li.disabled:hover {
+  background-color: #e0e0e0;
+}
+
 /* Answer result */
 img {
   max-width: 100px;
