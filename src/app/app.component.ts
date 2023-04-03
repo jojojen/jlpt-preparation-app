@@ -8,7 +8,7 @@ import { Gpt3Service } from './gpt-3.service';
 })
 export class AppComponent {
   question: string = '';
-  options: {id: string, text: string}[] = [];
+  options: { id: string; text: string }[] = [];
   correctAnswer: string = '';
   showAnswer: boolean = false;
   resultImage: string = '';
@@ -19,10 +19,17 @@ export class AppComponent {
   disableOptions: boolean = false;
   disableGenerateQuestionButton = false;
   disableSubmitAnswerButton = true;
+  requestLimitReached = false;
 
   constructor(private gpt3Service: Gpt3Service) {}
 
   async generateQuestion() {
+    console.log('generateQuestion called');
+    this.countRequests();
+    if (this.requestLimitReached) {
+      return;
+    }
+
     this.disableOptions = true;
     this.isLoading = true;
     this.disableGenerateQuestionButton = true;
@@ -46,7 +53,7 @@ export class AppComponent {
     }
   }
 
-  selectAnswer(answer: {id: string, text: string}) {
+  selectAnswer(answer: { id: string; text: string }) {
     if (!this.disableOptions) {
       this.selectedAnswer = answer.id;
       this.disableSubmitAnswerButton = false;
@@ -90,5 +97,25 @@ export class AppComponent {
       }
       this.disableGenerateQuestionButton = false;
     }, 1000);
+  }
+
+  // Add this function to count requests and apply limits
+  countRequests() {
+    const currentTime = new Date().getTime();
+    const requests = JSON.parse(localStorage.getItem('requests') || '[]');
+    requests.push(currentTime);
+    // Remove requests older than an hour
+    const oneHourAgo = currentTime - 60 * 60 * 1000;
+    const updatedRequests = requests.filter((requestTime: number) => requestTime >= oneHourAgo);
+
+    localStorage.setItem('requests', JSON.stringify(updatedRequests));
+    console.log('updatedRequests.length: ' + updatedRequests.length);
+    if (updatedRequests.length >= 10) {
+      this.requestLimitReached = true;
+      setTimeout(() => {
+        this.requestLimitReached = false;
+        this.countRequests();
+      }, oneHourAgo - updatedRequests[0]);
+    }
   }
 }
