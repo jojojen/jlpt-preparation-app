@@ -1,12 +1,12 @@
 <div class="container">
-    <button (click)="generateQuestion()">問題を生成する</button>
+    <button [disabled]="disableGenerateQuestionButton" [class.disabled]="disableGenerateQuestionButton" (click)="generateQuestion()">問題を生成する</button>
     <div *ngIf="isLoading" class="loader"></div>
     <div *ngIf="question">
         <p>{{ question }}</p>
         <ol>
             <li *ngFor="let option of options" (click)="selectAnswer(option)" [class.selected]="option.id === selectedAnswer">{{ option.text }}</li>
         </ol>
-        <button *ngIf="selectedAnswer && !hideSubmitButton" (click)="submitAnswer()">回答を送信します</button>
+        <button *ngIf="selectedAnswer && !hideSubmitButton" [disabled]="disableSubmitAnswerButton" [class.disabled]="disableSubmitAnswerButton" (click)="submitAnswer()">回答を送信します</button>
         <div *ngIf="isLoading" class="loader"></div>
         <div *ngIf="showAnswer && !isLoading">
             <img [src]="resultImage" alt="Result" />

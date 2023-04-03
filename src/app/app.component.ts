@@ -16,11 +16,14 @@ export class AppComponent {
   resultDescription: string = '';
   hideSubmitButton = false;
   isLoading: boolean = false;
+  disableGenerateQuestionButton = false;
+  disableSubmitAnswerButton = true;
 
   constructor(private gpt3Service: Gpt3Service) {}
 
   async generateQuestion() {
     this.isLoading = true;
+    this.disableGenerateQuestionButton = true;
     this.showAnswer = false;
     this.hideSubmitButton = false;
     this.resultImage = '';
@@ -42,12 +45,14 @@ export class AppComponent {
 
   selectAnswer(answer: {id: string, text: string}) {
     this.selectedAnswer = answer.id;
+    this.disableSubmitAnswerButton = false;
   }
 
   submitAnswer() {
     this.showAnswer = true;
     this.hideSubmitButton = true;
     this.isLoading = true;
+    this.disableSubmitAnswerButton = false;
 
     setTimeout(() => {
       this.isLoading = false;
@@ -68,15 +73,16 @@ export class AppComponent {
         const randomNumber = Math.random() * 100;
         if (randomNumber < 79) {
           this.resultImage = 'assets/feedback/incorrect_r.png';
-          this.resultDescription = '間違いました！(レアリティ:R)';
+          this.resultDescription = '残念ですが、不正解です。(レアリティ:R)';
         } else if (randomNumber >= 79 && randomNumber < 97) {
           this.resultImage = 'assets/feedback/incorrect_sr.png';
-          this.resultDescription = '間違いました！(レアリティ:SR)';
+          this.resultDescription = '残念ですが、不正解です。(レアリティ:SR)';
         } else {
           this.resultImage = 'assets/feedback/incorrect_ssr.png';
-          this.resultDescription = '間違いました！(レアリティ:SSR)';
+          this.resultDescription = '残念ですが、不正解です。(レアリティ:SSR)';
         }
       }
+      this.disableGenerateQuestionButton = false;
     }, 1000);
   }
 }
