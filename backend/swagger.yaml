@@ -1,0 +1,54 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: JLPT Feedback API
+  description: A RESTful API to store feedback from JLPT exam app
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /feedback:
+    post:
+      summary: Create a new feedback
+      parameters:
+        - in: body
+          name: feedback
+          description: The feedback object to be created
+          schema:
+            type: object
+            required:
+              - uid
+              - questionJSON
+              - feedback
+            properties:
+              uid:
+                type: string
+              questionJSON:
+                type: string
+              feedback:
+                type: string
+                enum: [good, bad]
+              comment:
+                type: string
+      responses:
+        201:
+          description: Created
+          schema:
+            type: object
+            properties:
+              _id:
+                type: string
+              uid:
+                type: string
+              questionJSON:
+                type: string
+              feedback:
+                type: string
+                enum: [good, bad]
+              comment:
+                type: string
+        400:
+          description: Bad Request

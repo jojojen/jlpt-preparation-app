@@ -46,3 +46,4 @@ Thumbs.db
 
 # ignore environment files
 /frontend/src/environments/*.ts
+/backend/.env
