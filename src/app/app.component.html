@@ -6,7 +6,7 @@
     問題を生成する
   </button>
   <div *ngIf="requestLimitReached" class="limit-reached">
-    The request limit of 10 times per hour has been reached.<br>
+    The request limit has been reached.<br>
     Please wait for an hour before trying again.
   </div>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>

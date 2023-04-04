@@ -1,3 +1,4 @@
+// app.component.ts
 import { Component } from '@angular/core';
 import { Gpt3Service } from './gpt-3.service';
 
@@ -7,6 +8,7 @@ import { Gpt3Service } from './gpt-3.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  // Declare component properties
   question: string = '';
   options: { id: string; text: string }[] = [];
   correctAnswer: string = '';
@@ -24,41 +26,29 @@ export class AppComponent {
 
   constructor(private gpt3Service: Gpt3Service) {}
 
+  // Generate a new question
   async generateQuestion() {
-    
-    console.log('generateQuestion called');
-    this.countRequests();
+    // Check request limit
+    this.checkRequestLimit();
     if (this.requestLimitReached) {
       return;
     }
 
-    this.disableOptions = true;
-    this.isLoading = true;
-    this.disableGenerateQuestionButton = true;
-    this.showAnswer = false;
-    this.hideSubmitButton = false;
-    this.resultImage = '';
-    this.selectedAnswer = '';
+    this.prepareForNewQuestion();
 
     try {
-      // const resultText = await this.gpt3Service.callGpt3Api();
       const { resultText, error } = await this.gpt3Service.callGpt3Api();
-      console.log("resultText:" + resultText);
-      const result = JSON.parse(resultText);
-
-      this.question = result.text;
-      this.options = result.options;
-      this.correctAnswer = result.answer;
-
-      this.isLoading = false;
-      this.disableOptions = false;
+      if (error) {
+        this.handleError();
+      } else {
+        this.handleSuccess(resultText);
+      }
     } catch (error) {
-      console.error('Error generating question:', error);
-      this.errorMessage = 'Something go wrong, please try later.';
-      this.isLoading = false;
+      this.handleError();
     }
   }
 
+  // Select an answer
   selectAnswer(answer: { id: string; text: string }) {
     if (!this.disableOptions) {
       this.selectedAnswer = answer.id;
@@ -66,61 +56,83 @@ export class AppComponent {
     }
   }
 
+  // Submit the selected answer
   submitAnswer() {
+    this.prepareForAnswerEvaluation();
+
+    setTimeout(() => {
+      this.evaluateAnswer();
+    }, 500);
+  }
+
+  // Prepare for a new question
+  private prepareForNewQuestion() {
+    this.disableOptions = true;
+    this.isLoading = true;
+    this.disableGenerateQuestionButton = true;
+    this.showAnswer = false;
+    this.hideSubmitButton = false;
+    this.resultImage = '';
+    this.selectedAnswer = '';
+  }
+
+  // Handle successful API response
+  private handleSuccess(resultText: string) {
+    const result = JSON.parse(resultText);
+    this.question = result.text;
+    this.options = result.options;
+    this.correctAnswer = result.answer;
+    this.isLoading = false;
+    this.disableOptions = false;
+  }
+
+  // Handle error in API response
+  private handleError() {
+    this.errorMessage = 'Something went wrong, please try later.';
+    this.isLoading = false;
+  }
+
+  // Prepare for answer evaluation
+  private prepareForAnswerEvaluation() {
     this.showAnswer = true;
     this.hideSubmitButton = true;
     this.isLoading = true;
     this.disableSubmitAnswerButton = false;
     this.disableOptions = true;
-
-    setTimeout(() => {
-      this.isLoading = false;
-
-      if (this.selectedAnswer === this.correctAnswer) {
-        const randomNumber = Math.random() * 100;
-        if (randomNumber < 79) {
-          this.resultImage = 'assets/feedback/correct_r.png';
-          this.resultDescription = '正解です！(レアリティ:R)';
-        } else if (randomNumber >= 79 && randomNumber < 97) {
-          this.resultImage = 'assets/feedback/correct_sr.png';
-          this.resultDescription = '正解です！(レアリティ:SR)';
-        } else {
-          this.resultImage = 'assets/feedback/correct_ssr.png';
-          this.resultDescription = '正解です！(レアリティ:SSR)';
-        }
-      } else {
-        const randomNumber = Math.random() * 100;
-        if (randomNumber < 79) {
-          this.resultImage = 'assets/feedback/incorrect_r.png';
-          this.resultDescription = '残念ですが、不正解です。(レアリティ:R)';
-        } else if (randomNumber >= 79 && randomNumber < 97) {
-          this.resultImage = 'assets/feedback/incorrect_sr.png';
-          this.resultDescription = '残念ですが、不正解です。(レアリティ:SR)';
-        } else {
-          this.resultImage = 'assets/feedback/incorrect_ssr.png';
-          this.resultDescription = '残念ですが、不正解です。(レアリティ:SSR)';
-        }
-      }
-      this.disableGenerateQuestionButton = false;
-    }, 500);
   }
 
-  // Add this function to count requests and apply limits
-  countRequests() {
+  // Evaluate the selected answer
+  private evaluateAnswer() {
+    this.isLoading = false;
+    const answerCorrect = this.selectedAnswer === this.correctAnswer;
+    const randomNumber = Math.random() * 100;
+    this.setResultImageAndDescription(answerCorrect, randomNumber);
+    this.disableGenerateQuestionButton = false;
+  }
+
+  // Set result image and description based on answer correctness and a random number
+  private setResultImageAndDescription(answerCorrect: boolean, randomNumber: number) {
+    const rarity = randomNumber < 79 ? 'R' : randomNumber < 97 ? 'SR' : 'SSR';
+    const result = answerCorrect ? '正解です！' : '残念ですが、不正解です。';
+    const resultImagePrefix = answerCorrect ? 'correct' : 'incorrect';
+    this.resultImage = `assets/feedback/${resultImagePrefix}_${rarity.toLowerCase()}.png`;
+    this.resultDescription = `${result}(レアリティ:${rarity})`;
+  }
+
+  // Check the request limit and update the requestLimitReached property
+  private checkRequestLimit() {
     const currentTime = new Date().getTime();
     const requests = JSON.parse(localStorage.getItem('requests') || '[]');
     requests.push(currentTime);
-    // Remove requests older than an hour
     const oneHourAgo = currentTime - 60 * 60 * 1000;
     const updatedRequests = requests.filter((requestTime: number) => requestTime >= oneHourAgo);
 
     localStorage.setItem('requests', JSON.stringify(updatedRequests));
-    console.log('updatedRequests.length: ' + updatedRequests.length);
     if (updatedRequests.length >= 10) {
       this.requestLimitReached = true;
       setTimeout(() => {
         this.requestLimitReached = false;
-        this.countRequests();
+        this.checkRequestLimit();
       }, oneHourAgo - updatedRequests[0]);
     }
   }
