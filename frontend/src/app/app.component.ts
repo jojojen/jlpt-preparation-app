@@ -1,6 +1,9 @@
 // app.component.ts
 import { Component } from '@angular/core';
 import { Gpt3Service } from './gpt-3.service';
+import { FeedbackService } from './feedback.service';
+import { generateUniqueHash } from './utils';
+
 
 @Component({
   selector: 'app-root',
@@ -23,16 +26,21 @@ export class AppComponent {
   disableSubmitAnswerButton = true;
   requestLimitReached = false;
   errorMessage: string = '';
+  feedback: 'good' | 'bad' = 'good';
+  comment: string = '';
+  feedbackSubmitted = false;
+  disableSubmitFeedbackButton = false;
+  questionAll: string = '';
 
-  constructor(private gpt3Service: Gpt3Service) {}
+  constructor(private gpt3Service: Gpt3Service, private feedbackService: FeedbackService) {}
 
   // Generate a new question
   async generateQuestion() {
     // Check request limit
-    this.checkRequestLimit();
-    if (this.requestLimitReached) {
-      return;
-    }
+    // this.checkRequestLimit();
+    // if (this.requestLimitReached) {
+    //   return;
+    // }
 
     this.prepareForNewQuestion();
 
@@ -79,6 +87,7 @@ export class AppComponent {
   // Handle successful API response
   private handleSuccess(resultText: string) {
     const result = JSON.parse(resultText);
+    this.questionAll = resultText;
     this.question = result.text;
     this.options = result.options;
     this.correctAnswer = result.answer;
@@ -136,4 +145,29 @@ export class AppComponent {
       }, oneHourAgo - updatedRequests[0]);
     }
   }
+
+  // Submit feedback
+  submitFeedback() {
+    this.isLoading = true;
+    const uid = generateUniqueHash(this.questionAll);
+    const feedbackData = {
+      uid: uid,
+      questionJSON: this.questionAll,
+      feedback: this.feedback,
+      comment: this.comment,
+    };
+  
+    this.feedbackService.submitFeedback(feedbackData).subscribe(
+      (response) => {
+        console.log('Feedback submitted successfully', response);
+        this.feedbackSubmitted = true;
+        this.disableSubmitFeedbackButton = true;
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Error submitting feedback', error);
+      }
+    );
+  }
+
 }

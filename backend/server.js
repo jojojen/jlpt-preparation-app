@@ -4,6 +4,7 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
 require('dotenv').config();
+const cors = require('cors');
 
 // Connect to MongoDB
 const uri = process.env.MONGODB_URI;
@@ -29,6 +30,9 @@ app.use(express.json());
 
 // Setup swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// cors
+app.use(cors());
 
 // POST feedback endpoint
 app.post('/feedback', async (req, res) => {
