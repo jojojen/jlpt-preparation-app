@@ -37,10 +37,10 @@ export class AppComponent {
   // Generate a new question
   async generateQuestion() {
     // Check request limit
-    // this.checkRequestLimit();
-    // if (this.requestLimitReached) {
-    //   return;
-    // }
+    this.checkRequestLimit();
+    if (this.requestLimitReached) {
+      return;
+    }
 
     this.prepareForNewQuestion();
 
