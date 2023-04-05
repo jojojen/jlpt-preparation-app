@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./swagger.yaml');
+const yaml = require('yamljs');
+const path = require('path');
+const yamlPath = path.join(__dirname, 'swagger.yaml');
+const swaggerDocument = yaml.load(yamlPath);
 require('dotenv').config();
 const cors = require('cors');
 
@@ -31,8 +33,15 @@ app.use(express.json());
 // Setup swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// cors
-app.use(cors());
+// CORS settings
+const corsOptions = {
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+};
+
+// Use CORS with the specified options
+app.use(cors(corsOptions));
 
 // POST feedback endpoint
 app.post('/feedback', async (req, res) => {
@@ -45,7 +54,9 @@ app.post('/feedback', async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+// local testing
+// const port = process.env.PORT || 3000;
+// app.listen(port, () => {
+//   console.log(`Listening on port ${port}`);
+// });
+module.exports = app;

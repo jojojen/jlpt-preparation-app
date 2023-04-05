@@ -4,7 +4,8 @@ info:
   title: JLPT Feedback API
   description: A RESTful API to store feedback from JLPT exam app
 schemes:
-  - http
+  - https
+host: jlpt-app-backend.vercel.app
 consumes:
   - application/json
 produces:

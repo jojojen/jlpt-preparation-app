@@ -6,8 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class FeedbackService {
-  private apiUrl = 'http://localhost:5000/feedback';
-
+  // private apiUrl = 'http://localhost:5000/feedback';
+  private apiUrl = 'https://jlpt-app-backend.vercel.app/feedback';
+  
   constructor(private http: HttpClient) {}
 
   submitFeedback(feedbackData: {
