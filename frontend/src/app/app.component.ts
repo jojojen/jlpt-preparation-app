@@ -36,6 +36,8 @@ export class AppComponent {
 
   // Generate a new question
   async generateQuestion() {
+    this.disableSubmitFeedbackButton = false;
+    this.feedbackSubmitted = false;
     // Check request limit
     this.checkRequestLimit();
     if (this.requestLimitReached) {
