@@ -54,6 +54,33 @@ app.post('/feedback', async (req, res) => {
   }
 });
 
+// NEW: GET all feedbacks with "good" feedback
+app.get('/feedback/good-uids', async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find({ feedback: 'good' }).select('uid');
+    const uidList = feedbacks.map(feedback => feedback.uid);
+    res.status(200).send(uidList);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
+// GET questionJSON by uid
+app.get('/feedback/question/:uid', async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const feedback = await Feedback.findOne({ uid });
+    if (feedback) {
+      res.status(200).send({ questionJSON: feedback.questionJSON });
+    } else {
+      res.status(404).send({ error: 'Feedback not found' });
+    }
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
+
 // local testing
 // const port = process.env.PORT || 3000;
 // app.listen(port, () => {

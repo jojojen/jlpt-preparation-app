@@ -53,3 +53,32 @@ paths:
                 type: string
         400:
           description: Bad Request
+  /feedback/good-uids:
+    get:
+      summary: Get a list of uids with good feedback
+      responses:
+        200:
+          description: A list of uids with good feedback
+          schema:
+            type: array
+            items:
+              type: string
+  /feedback/question/{uid}:
+    get:
+      summary: Get question JSON by uid
+      parameters:
+        - in: path
+          name: uid
+          type: string
+          required: true
+          description: The uid of the feedback
+      responses:
+        200:
+          description: The question JSON related to the uid
+          schema:
+            type: object
+            properties:
+              questionJSON:
+                type: string
+        404:
+          description: Feedback not found for the provided uid
