@@ -1,0 +1,53 @@
+.feedback-container {
+  margin-top: 20px;
+}
+
+input[type='radio'] {
+  display: none;
+}
+
+.btn-group {
+  display: inline-flex;
+  margin-bottom: 15px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #39d1b4;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.btn:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.btn:hover {
+  background-color: #2ca8a0;
+}
+
+.btn.active {
+  background-color: #2ca8a0;
+}
+
+button {
+  cursor: pointer;
+  background-color: #666b7a;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+  font-size: 16px;
+}

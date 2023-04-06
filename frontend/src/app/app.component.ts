@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Gpt3Service } from './gpt-3.service';
 import { FeedbackService } from './feedback.service';
 import { generateUniqueHash } from './utils';
-
+import { FeedbackComponent } from './feedback/feedback.component';
 
 @Component({
   selector: 'app-root',
@@ -26,11 +26,10 @@ export class AppComponent {
   disableSubmitAnswerButton = true;
   requestLimitReached = false;
   errorMessage: string = '';
-  feedback: 'good' | 'bad' = 'good';
-  comment: string = '';
-  feedbackSubmitted = false;
-  disableSubmitFeedbackButton = false;
   questionAll: string = '';
+  feedbackSubmitted: boolean = false;
+  disableSubmitFeedbackButton: boolean = false;
+  showFeedbackComponent: boolean = false;
 
   constructor(private gpt3Service: Gpt3Service, private feedbackService: FeedbackService) {}
 
@@ -38,6 +37,7 @@ export class AppComponent {
   async generateQuestion() {
     this.disableSubmitFeedbackButton = false;
     this.feedbackSubmitted = false;
+    this.showFeedbackComponent = false;
     // Check request limit
     this.checkRequestLimit();
     if (this.requestLimitReached) {
@@ -72,6 +72,7 @@ export class AppComponent {
 
     setTimeout(() => {
       this.evaluateAnswer();
+      this.showFeedbackComponent = true; 
     }, 500);
   }
 
@@ -148,18 +149,18 @@ export class AppComponent {
     }
   }
 
-  // Submit feedback
-  submitFeedback() {
+  onSubmitFeedback(feedbackData: { feedback: 'good' | 'bad'; comment: string }) {
     this.isLoading = true;
     const uid = generateUniqueHash(this.questionAll);
-    const feedbackData = {
+    
+    const dataToSubmit = {
       uid: uid,
       questionJSON: this.questionAll,
-      feedback: this.feedback,
-      comment: this.comment,
+      feedback: feedbackData.feedback,
+      comment: feedbackData.comment,
     };
-  
-    this.feedbackService.submitFeedback(feedbackData).subscribe(
+    
+    this.feedbackService.submitFeedback(dataToSubmit).subscribe(
       (response) => {
         console.log('Feedback submitted successfully', response);
         this.feedbackSubmitted = true;

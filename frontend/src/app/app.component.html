@@ -22,26 +22,11 @@
         <img [src]="resultImage" alt="Result" />
         <p>{{ resultDescription }}</p>
       </div>
-      <div *ngIf="showAnswer && !isLoading" class="feedback-form">
-        <h3>Feedback</h3>
-        <label for="feedback">Feedback:</label>
-        <select [(ngModel)]="feedback" name="feedback" id="feedback">
-          <option value="good">Good</option>
-          <option value="bad">Bad</option>
-        </select>
-        <br />
-        <label for="comment">Comment:</label>
-        <textarea [(ngModel)]="comment" name="comment" id="comment"></textarea>
-        <br />
-        <button
-        (click)="submitFeedback()"
-        [disabled]="disableSubmitFeedbackButton"
-        [class.disabled]="disableSubmitFeedbackButton">
-          Submit Feedback
-        </button>
-        <div *ngIf="feedbackSubmitted" class="feedback-success">
-          Feedback submitted successfully.
-        </div>
-      </div>
+      <app-feedback 
+      *ngIf="showFeedbackComponent"
+      [isLoading]="isLoading"
+      [feedbackSubmitted]="feedbackSubmitted"
+      (submitFeedback)="onSubmitFeedback($event)">
+      </app-feedback>
     </div>
   </div>
