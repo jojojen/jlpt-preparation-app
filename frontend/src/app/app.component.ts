@@ -4,6 +4,7 @@ import { Gpt3Service } from './gpt-3.service';
 import { FeedbackService } from './feedback.service';
 import { generateUniqueHash } from './utils';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,54 @@ export class AppComponent {
   disableSubmitFeedbackButton: boolean = false;
   showFeedbackComponent: boolean = false;
 
-  constructor(private gpt3Service: Gpt3Service, private feedbackService: FeedbackService) {}
+  constructor(private gpt3Service: Gpt3Service, private feedbackService: FeedbackService, private http: HttpClient) {}
+
+  async getQuestionFromCollection() {
+    const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
+
+    this.disableSubmitFeedbackButton = false;
+    this.feedbackSubmitted = false;
+    this.showFeedbackComponent = false;
+    // Check request limit
+    this.checkRequestLimit();
+    if (this.requestLimitReached) {
+      return;
+    }
+
+    this.prepareForNewQuestion();
+
+    try {
+      const goodUids = await this.http.get<string[]>(`${API_BASE_URL}/feedback/good-uids`).toPromise();
+      console.log('Response from /feedback/good-uids:', goodUids);
+      if (!goodUids || goodUids.length === 0) {
+        throw new Error('No good_uids received');
+      }
+
+      console.log("good_uids: " + goodUids);
+
+      const randomUid = goodUids[Math.floor(Math.random() * goodUids.length)];
+      // const randomUid = '8ljg73';
+      const questionResponse = await this.http.get<{ questionJSON: string }>(`${API_BASE_URL}/feedback/question/${randomUid}`).toPromise();
+      if (!questionResponse) {
+        throw new Error('No response received');
+      }
+      const resultText = questionResponse.questionJSON;
+      console.log("questionResponse.questionJSON: " + questionResponse.questionJSON);
+      const result = JSON.parse(resultText);
+      if (result.error) {
+        this.handleError(result.error);
+      } else {
+        this.handleSuccess(resultText);
+      }
+    } catch (error) {
+      this.handleError((error as Error).message);
+    }
+  }
+
+  private handleError(errorMessage?: string) {
+    this.errorMessage = errorMessage || 'Something went wrong, please try later.';
+    this.isLoading = false;
+  }
 
   // Generate a new question
   async generateQuestion() {
@@ -96,12 +144,6 @@ export class AppComponent {
     this.correctAnswer = result.answer;
     this.isLoading = false;
     this.disableOptions = false;
-  }
-
-  // Handle error in API response
-  private handleError() {
-    this.errorMessage = 'Something went wrong, please try later.';
-    this.isLoading = false;
   }
 
   // Prepare for answer evaluation

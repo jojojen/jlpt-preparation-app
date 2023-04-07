@@ -5,6 +5,12 @@
   (click)="generateQuestion()">
     問題を生成する
   </button>
+  <button
+  [disabled]="disableGenerateQuestionButton || requestLimitReached"
+  [class.disabled]="disableGenerateQuestionButton || requestLimitReached"
+  (click)="getQuestionFromCollection()">
+    問題を問題集から取得する
+  </button>
   <div *ngIf="requestLimitReached" class="limit-reached">
     The request limit has been reached.<br>
     Please wait for an hour before trying again.
