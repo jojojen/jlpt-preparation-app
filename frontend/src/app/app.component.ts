@@ -40,11 +40,12 @@ export class AppComponent {
     this.disableSubmitFeedbackButton = false;
     this.feedbackSubmitted = false;
     this.showFeedbackComponent = false;
-    // Check request limit
-    this.checkRequestLimit();
-    if (this.requestLimitReached) {
-      return;
-    }
+    this.requestLimitReached = false;
+    // no need to Check request limit
+    // this.checkRequestLimit();
+    // if (this.requestLimitReached) {
+    //   return;
+    // }
 
     this.prepareForNewQuestion();
 
@@ -178,11 +179,15 @@ export class AppComponent {
     const currentTime = new Date().getTime();
     const requests = JSON.parse(localStorage.getItem('requests') || '[]');
     requests.push(currentTime);
+    // one hour
     const oneHourAgo = currentTime - 60 * 60 * 1000;
-    const updatedRequests = requests.filter((requestTime: number) => requestTime >= oneHourAgo);
+    // one day
+    const oneDayAgo = currentTime - 60 * 60 * 1000;
+    const updatedRequests = requests.filter((requestTime: number) => requestTime >= oneDayAgo);
 
     localStorage.setItem('requests', JSON.stringify(updatedRequests));
-    if (updatedRequests.length >= 10) {
+    // limit times
+    if (updatedRequests.length >= 1) {
       this.requestLimitReached = true;
       setTimeout(() => {
         this.requestLimitReached = false;
