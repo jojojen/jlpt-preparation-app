@@ -28,6 +28,7 @@ export class AppComponent {
   requestLimitReached = false;
   errorMessage: string = '';
   questionAll: string = '';
+  explain: string = '';
   feedbackSubmitted: boolean = false;
   disableSubmitFeedbackButton: boolean = false;
   showFeedbackComponent: boolean = false;
@@ -142,6 +143,7 @@ export class AppComponent {
     this.questionAll = resultText;
     this.question = result.text;
     this.options = result.options;
+    this.explain = result.expalain;
     this.correctAnswer = result.answer;
     this.isLoading = false;
     this.disableOptions = false;
@@ -205,6 +207,7 @@ export class AppComponent {
       questionJSON: this.questionAll,
       feedback: feedbackData.feedback,
       comment: feedbackData.comment,
+      explain: this.explain
     };
     
     this.feedbackService.submitFeedback(dataToSubmit).subscribe(

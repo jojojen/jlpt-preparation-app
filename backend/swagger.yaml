@@ -24,6 +24,7 @@ paths:
               - uid
               - questionJSON
               - feedback
+              - explain
             properties:
               uid:
                 type: string
@@ -33,6 +34,8 @@ paths:
                 type: string
                 enum: [good, bad]
               comment:
+                type: string
+              explain:
                 type: string
       responses:
         201:
@@ -50,6 +53,8 @@ paths:
                 type: string
                 enum: [good, bad]
               comment:
+                type: string
+              explain:
                 type: string
         400:
           description: Bad Request

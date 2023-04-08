@@ -22,6 +22,7 @@ const feedbackSchema = new mongoose.Schema({
   questionJSON: String,
   feedback: String,
   comment: String,
+  explain: String
 });
 
 const Feedback = mongoose.model('Feedback', feedbackSchema);
