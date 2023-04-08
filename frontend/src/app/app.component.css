@@ -71,7 +71,7 @@ li.disabled:hover {
 
 /* Answer result */
 img {
-  max-width: 100px;
+  max-width: 300px;
   margin-right: 10px;
   vertical-align: middle;
 }
