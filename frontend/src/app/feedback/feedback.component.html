@@ -8,11 +8,10 @@
       <input type="radio" id="bad" name="feedback" value="bad" [(ngModel)]="feedback" />悪い
     </label>
   </div>
-  <div>
-    <label for="comment">コメント:</label>
-    <textarea id="comment" [(ngModel)]="comment"></textarea>
+  <div class="input-container">
+    <textarea class="comment-input" id="comment" [(ngModel)]="comment"></textarea>
+    <button [disabled]="disableSubmitButton" (click)="onSubmit()" class="send-button">送信</button>
   </div>
-  <button [disabled]="disableSubmitButton" (click)="onSubmit()">送信</button>
 </div>
 <div *ngIf="feedbackSubmitted">
   <p>フィードバックが送信されました。ありがとうございます。</p>
