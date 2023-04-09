@@ -12,7 +12,6 @@
     問題集から問題を取得する
   </button>
   <br/>
-  <span class="copy-success-msg" id="copySuccessMsg" style="display: none;">BTC Addr. Copied!</span>
   <div *ngIf="requestLimitReached" class="limit-reached">
    『GPTが問題を生成する』制限に達しました。もう一度試す前に1日お待ちください。
   </div>
@@ -36,12 +35,13 @@
       (submitFeedback)="onSubmitFeedback($event)">
       </app-feedback>
     </div>
-  </div>
-  <footer class="footer">
+</div>
+<footer class="footer">
+  <div class="footer-content">
     <a href="https://www.linkedin.com/in/jenhung-chang/" target="_blank" rel="noopener noreferrer">
       <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="50" height="50" />
     </a>
-
+    <a href="https://www.buymeacoffee.com/jenhungjoce"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=jenhungjoce&button_colour=39c5bb&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" /></a>
     <img
       src="https://miro.medium.com/v2/resize:fit:256/format:webp/1*Jwnwof2PW457fvT6ky7Zpg.png"
       alt="Bitcoin Logo"
@@ -52,4 +52,8 @@
       Support with BTC:
       <span class="btc-address-short" id="btcAddress" (click)="copyToClipboard()">bc1qtqrhq43l72eeukmrcw46xe7z5g82ewux2zpnr0</span>
     </p>
-  </footer>
+  </div>
+  <div class="message-container">
+    <span class="copy-success-msg" id="copySuccessMsg" style="display: none;">BTC Addr. Copied! Thanks for your donation!</span>
+  </div>
+</footer>
