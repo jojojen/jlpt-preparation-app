@@ -35,6 +35,26 @@ export class AppComponent {
 
   constructor(private gpt3Service: Gpt3Service, private feedbackService: FeedbackService, private http: HttpClient) {}
 
+  // donation
+  copyToClipboard() {
+    const btcAddress = document.getElementById('btcAddress') as HTMLElement;
+    const textArea = document.createElement('textarea');
+    textArea.value = btcAddress.textContent || '';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+
+    const copySuccessMsg = document.getElementById('copySuccessMsg');
+    if (copySuccessMsg) {
+      copySuccessMsg.style.display = 'inline';
+
+      setTimeout(() => {
+        copySuccessMsg.style.display = 'none';
+      }, 2000);
+    }
+  }
+
   async getQuestionFromCollection() {
     const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
 
