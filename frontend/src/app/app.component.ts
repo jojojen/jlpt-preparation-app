@@ -203,13 +203,11 @@ export class AppComponent {
     requests.push(currentTime);
     // one hour
     const oneHourAgo = currentTime - 60 * 60 * 1000;
-    // one day
-    const oneDayAgo = currentTime - 60 * 60 * 1000;
-    const updatedRequests = requests.filter((requestTime: number) => requestTime >= oneDayAgo);
+    const updatedRequests = requests.filter((requestTime: number) => requestTime >= oneHourAgo);
 
     localStorage.setItem('requests', JSON.stringify(updatedRequests));
     // limit times
-    if (updatedRequests.length >= 1) {
+    if (updatedRequests.length >= 3) {
       this.requestLimitReached = true;
       setTimeout(() => {
         this.requestLimitReached = false;
