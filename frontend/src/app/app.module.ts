@@ -7,10 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { FeedbackService } from './feedback.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { FooterComponent } from './footer/footer.component';
 @NgModule({
   declarations: [
     AppComponent,
     FeedbackComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

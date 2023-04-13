@@ -24,7 +24,7 @@ export class Gpt3Service {
           max_tokens: 300,
           n: 1,
           stop: null,
-          temperature: 0.55,
+          temperature: 0.5,
         },
         {
           headers: {

@@ -1,0 +1,30 @@
+/* footer.component.css */
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+  
+.btc-address-short {
+  display: inline-block;
+  max-width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+  
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+  
+  @media screen and (max-width: 600px) {
+    .footer-content {
+      flex-wrap: wrap;
+    }
+  }
