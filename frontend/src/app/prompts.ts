@@ -1,32 +1,39 @@
 export const prompts = [
     {
-      prompt: `VOCALOIDの歌詞から、日常会話で使われる日本語を理解するための問題をJSON形式で作成してください。条件は以下の通りです。:
-      1. 問題文の単語を選択肢にそのまま使わない。
-      2. 2つの選択肢のうち1つは常識・文法に合致し、もう1つは常識・文法に照らして明確に違和感のあるものとする。
-      3. 正解は常識・文法に従っていること。
-      4. 選択肢の区別が明確であること。
-      5. 選択肢は文脈に適したものを含める。
-      6. 文脈を提供する上下文を含める。
-      7. 必ず以下のJSON形式で回答してください:
+      prompt: `As an AI language model proficient in JLPT questions and having extensive experience in teaching Japanese, please create ONE test question for understanding everyday Japanese conversation, following these conditions:
+
+      1. Do not use the words in the question directly in the options.
+      2. Of the two choices, one should conform to common sense and grammar, while the other should clearly feel out of place when considering common sense or grammar.
+      3. The correct answer must follow common sense and grammar.
+      4. The distinction between the choices should be clear.
+      5. The options should include context-appropriate content.
+      6. Include context-providing surrounding text.
+      
+      Finally, format your response as a JSON object, as shown in the example below:
+      
       {
         "text": "街を ___ していたら、山本さんに会った。",
         "options": [
           {"id": "A", "text": "ぶらぶら"},
           {"id": "B", "text": "ばらばら"}
         ],
-        "expalain": "「ぶらぶら」は、何かに縛られずにのんびりと歩いたり、あてもなくぶらついたりする様子を表します。一方、「ばらばら」は、散らかっている、ばらけている、或いは分散しているという意味であり、この文脈では不適切です。したがって、正解はA、「ぶらぶら」です。",
+        "explain": "「ぶらぶら」は、何かに縛られずにのんびりと歩いたり、あてもなくぶらついたりする様子を表します。一方、「ばらばら」は、散らかっている、ばらけている、或いは分散しているという意味であり、この文脈では不適切です。したがって、正解はA、「ぶらぶら」です。",
         "answer": "A"
-      }`
+      }"
+      `
     },
     {
-      prompt: `VOCALOIDの歌詞から、日常会話で使われる日本語を理解するための問題をJSON形式で作成してください。条件は以下の通りです。:
-      1. 問題文の単語を選択肢にそのまま使わない。
-      2. 2つの選択肢のうち1つは常識・文法に合致し、もう1つは常識・文法に照らして明確に違和感のあるものとする。
-      3. 正解は常識・文法に従っていること。
-      4. 選択肢の区別が明確であること。
-      5. 選択肢は文脈に適したものを含める。
-      6. 文脈を提供する上下文を含める。
-      7. 必ず以下のJSON形式で回答してください:
+      prompt: `As an AI language model proficient in JLPT questions and having extensive experience in teaching Japanese, please create ONE test question for understanding everyday Japanese conversation, following these conditions:
+
+      1. Do not use the words in the question directly in the options.
+      2. Of the two choices, one should conform to common sense and grammar, while the other should clearly feel out of place when considering common sense or grammar.
+      3. The correct answer must follow common sense and grammar.
+      4. The distinction between the choices should be clear.
+      5. The options should include context-appropriate content.
+      6. Include context-providing surrounding text.
+      
+      Finally, format your response as a JSON object, as shown in the example below:
+
       {
         "text": "みんなが私の意見に反対していたが、彼女 ___ 応援してくれた",
         "options": [

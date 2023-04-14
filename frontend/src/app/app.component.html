@@ -1,7 +1,7 @@
 <div class="container">
   <button
-  [disabled]="disableGenerateQuestionButton || requestLimitReached"
-  [class.disabled]="disableGenerateQuestionButton || requestLimitReached"
+  [disabled]="disableGenerateQuestionButton"
+  [class.disabled]="disableGenerateQuestionButton"
   (click)="generateQuestion()">
     GPTが問題を生成する
   </button>
@@ -11,10 +11,6 @@
   (click)="getQuestionFromCollection()">
     問題集から問題を取得する
   </button>
-  <br/>
-  <div *ngIf="requestLimitReached" class="limit-reached">
-   『GPTが問題を生成する』制限に達しました。お待ちください。
-  </div>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
     <div *ngIf="isLoading" class="loader"></div>
     <div *ngIf="question">

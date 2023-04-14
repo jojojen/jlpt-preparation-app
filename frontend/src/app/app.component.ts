@@ -25,7 +25,6 @@ export class AppComponent {
   disableOptions: boolean = false;
   disableGenerateQuestionButton = false;
   disableSubmitAnswerButton = true;
-  requestLimitReached = false;
   errorMessage: string = '';
   questionAll: string = '';
   explain: string = '';
@@ -41,12 +40,6 @@ export class AppComponent {
     this.disableSubmitFeedbackButton = false;
     this.feedbackSubmitted = false;
     this.showFeedbackComponent = false;
-    this.requestLimitReached = false;
-    // no need to Check request limit
-    // this.checkRequestLimit();
-    // if (this.requestLimitReached) {
-    //   return;
-    // }
 
     this.prepareForNewQuestion();
 
@@ -88,11 +81,6 @@ export class AppComponent {
     this.disableSubmitFeedbackButton = false;
     this.feedbackSubmitted = false;
     this.showFeedbackComponent = false;
-    // Check request limit
-    this.checkRequestLimit();
-    if (this.requestLimitReached) {
-      return;
-    }
 
     this.prepareForNewQuestion();
 
@@ -174,26 +162,6 @@ export class AppComponent {
     const resultImagePrefix = answerCorrect ? 'correct' : 'incorrect';
     this.resultImage = `assets/feedback/${resultImagePrefix}_${rarity.toLowerCase()}.png`;
     this.resultDescription = `${result}(レアリティ:${rarity})`;
-  }
-
-  // Check the request limit and update the requestLimitReached property
-  private checkRequestLimit() {
-    const currentTime = new Date().getTime();
-    const requests = JSON.parse(localStorage.getItem('requests') || '[]');
-    requests.push(currentTime);
-    // one hour
-    const oneHourAgo = currentTime - 60 * 60 * 1000;
-    const updatedRequests = requests.filter((requestTime: number) => requestTime >= oneHourAgo);
-
-    localStorage.setItem('requests', JSON.stringify(updatedRequests));
-    // limit times
-    if (updatedRequests.length >= 3) {
-      this.requestLimitReached = true;
-      setTimeout(() => {
-        this.requestLimitReached = false;
-        this.checkRequestLimit();
-      }, oneHourAgo - updatedRequests[0]);
-    }
   }
 
   onSubmitFeedback(feedbackData: { feedback: 'good' | 'bad'; comment: string }) {
