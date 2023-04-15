@@ -1,3 +1,4 @@
+# swagger.yaml
 swagger: '2.0'
 info:
   version: 1.0.0
@@ -7,6 +8,28 @@ schemes:
   - https
 # host: jlpt-app-backend.vercel.app
 host: jlpt-app-backend-jojojen.vercel.app
+
+definitions:
+  Question:
+    type: object
+    properties:
+      _id:
+        type: string
+      questionJSON:
+        type: string
+      explain:
+        type: string
+      feedbacks:
+        type: array
+        items:
+          type: object
+          properties:
+            rating:
+              type: integer
+              minimum: 0
+              maximum: 1
+            comment:
+              type: string
 
 consumes:
   - application/json
@@ -111,24 +134,36 @@ paths:
         404:
           description: Question not found
 
-definitions:
-  Question:
-    type: object
-    properties:
-      _id:
-        type: string
-      questionJSON:
-        type: string
-      explain:
-        type: string
-      feedbacks:
-        type: array
-        items:
-          type: object
-          properties:
-            rating:
-              type: integer
-              minimum: 0
-              maximum: 1
-            comment:
-              type: string
+  /question/{id}/comment:
+    post:
+      summary: Add a new comment to a specific question
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: The ID of the question
+        - in: body
+          name: comment
+          description: The comment object to be added
+          schema:
+            type: object
+            required:
+              - rating
+              - comment
+            properties:
+              rating:
+                type: integer
+                minimum: 0
+                maximum: 1
+              comment:
+                type: string
+      responses:
+        200:
+          description: The updated question object with the new comment
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          description: Bad Request
+        404:
+          description: Question not found

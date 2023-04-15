@@ -53,9 +53,29 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
+const addComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating, comment } = req.body;
+    const question = await Question.findById(id);
+
+    if (question) {
+      question.feedbacks.push({ rating, comment });
+      await question.save();
+      res.status(200).send(question);
+    } else {
+      res.status(404).send({ error: 'Question not found' });
+    }
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+};
+
+
 module.exports = {
   getQuestion,
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  addComment,
 };
