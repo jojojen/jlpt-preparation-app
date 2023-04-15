@@ -34,42 +34,42 @@ export class AppComponent {
 
   constructor(private gpt3Service: Gpt3Service, private feedbackService: FeedbackService, private http: HttpClient) {}
 
-  async getQuestionFromCollection() {
-    const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
+async getQuestionFromCollection() {
 
-    this.disableSubmitFeedbackButton = false;
-    this.feedbackSubmitted = false;
-    this.showFeedbackComponent = false;
+  // const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
+  const API_BASE_URL = 'https://jlpt-app-backend-jojojen.vercel.app';
 
-    this.prepareForNewQuestion();
+  this.disableSubmitFeedbackButton = false;
+  this.feedbackSubmitted = false;
+  this.showFeedbackComponent = false;
 
-    try {
-      const goodUids = await this.http.get<string[]>(`${API_BASE_URL}/feedback/good-uids`).toPromise();
-      console.log('Response from /feedback/good-uids:', goodUids);
-      if (!goodUids || goodUids.length === 0) {
-        throw new Error('No good_uids received');
-      }
+  this.prepareForNewQuestion();
 
-      console.log("good_uids: " + goodUids);
-
-      const randomUid = goodUids[Math.floor(Math.random() * goodUids.length)];
-      // const randomUid = '8ljg73';
-      const questionResponse = await this.http.get<{ questionJSON: string }>(`${API_BASE_URL}/feedback/question/${randomUid}`).toPromise();
-      if (!questionResponse) {
-        throw new Error('No response received');
-      }
-      const resultText = questionResponse.questionJSON;
-      console.log("questionResponse.questionJSON: " + questionResponse.questionJSON);
-      const result = JSON.parse(resultText);
-      if (result.error) {
-        this.handleError(result.error);
-      } else {
-        this.handleSuccess(resultText);
-      }
-    } catch (error) {
-      this.handleError((error as Error).message);
+  try {
+    const n = 10; // Number of questions to retrieve
+    const questions = await this.http.get<{ questionJSON: string }[]>(`${API_BASE_URL}/questions/top?n=${n}`).toPromise();
+    
+    if (!questions || questions.length === 0) {
+      throw new Error('No questions received');
     }
+
+    // Log the whole question object content for each question
+    questions.forEach((question, index) => {
+      console.log(`Question ${index + 1}:`, question);
+    });
+    
+    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+    const resultText = randomQuestion.questionJSON;
+    const result = JSON.parse(resultText);
+    if (result.error) {
+      this.handleError(result.error);
+    } else {
+      this.handleSuccess(resultText);
+    }
+  } catch (error) {
+    this.handleError((error as Error).message);
   }
+}
 
   private handleError(errorMessage?: string) {
     this.errorMessage = errorMessage || 'Something went wrong, please try later.';
@@ -90,7 +90,22 @@ export class AppComponent {
         this.handleError();
       } else {
         this.handleSuccess(resultText);
-      }
+
+        // Save the generated question to the database
+        // const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
+        const API_BASE_URL = 'https://jlpt-app-backend-jojojen.vercel.app';
+
+        const questionData = JSON.parse(resultText);
+        const questionToSave = {
+          _id: generateUniqueHash(resultText), // Generate a unique ID for the question
+          questionJSON: resultText,
+          explain: questionData.explain,
+        };
+
+        await this.http.post(`${API_BASE_URL}/question`, questionToSave).toPromise();
+          console.log('Question saved to the database:', questionToSave);
+        }
+
     } catch (error) {
       this.handleError();
     }
@@ -167,24 +182,23 @@ export class AppComponent {
   onSubmitFeedback(feedbackData: { feedback: 'good' | 'bad'; comment: string }) {
     this.isLoading = true;
     const uid = generateUniqueHash(this.questionAll);
-    
+  
     const dataToSubmit = {
       uid: uid,
-      questionJSON: this.questionAll,
       feedback: feedbackData.feedback,
-      comment: feedbackData.comment,
-      explain: this.explain
+      comment: feedbackData.comment
     };
-    
-    this.feedbackService.submitFeedback(dataToSubmit).subscribe(
+  
+    this.feedbackService.addCommentToQuestion(dataToSubmit).subscribe(
       (response) => {
-        console.log('Feedback submitted successfully', response);
+        console.log('Comment added to the question', response);
         this.feedbackSubmitted = true;
         this.disableSubmitFeedbackButton = true;
         this.isLoading = false;
       },
       (error) => {
-        console.error('Error submitting feedback', error);
+        console.error('Error adding comment to the question', error);
+        this.isLoading = false;
       }
     );
   }
