@@ -71,6 +71,25 @@ const addComment = async (req, res) => {
   }
 };
 
+const getTopQuestions = async (req, res) => {
+  const n = parseInt(req.query.n);
+
+  if (isNaN(n) || n <= 0) {
+    return res.status(400).json({ message: 'Invalid value for parameter "n"' });
+  }
+
+  try {
+    const topQuestions = await Question.find({
+      'feedbacks.rating': 1,
+    })
+      .limit(n)
+      .exec();
+
+    res.status(200).json(topQuestions);
+  } catch (error) {
+    res.status(500).json({ message: 'Error while retrieving questions', error });
+  }
+};
 
 module.exports = {
   getQuestion,
@@ -78,4 +97,5 @@ module.exports = {
   updateQuestion,
   deleteQuestion,
   addComment,
+  getTopQuestions
 };

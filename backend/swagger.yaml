@@ -167,3 +167,21 @@ paths:
           description: Bad Request
         404:
           description: Question not found
+  /questions/top:
+    get:
+      summary: Get N questions with at least one rating of 1
+      parameters:
+        - in: query
+          name: n
+          type: integer
+          required: true
+          description: The number of questions to retrieve
+      responses:
+        200:
+          description: A list of N questions with at least one rating of 1
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Question'
+        400:
+          description: Bad Request
