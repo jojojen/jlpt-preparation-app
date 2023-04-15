@@ -1,89 +1,134 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: JLPT Feedback API
-  description: A RESTful API to store feedback from JLPT exam app
+  title: Questions API
+  description: A RESTful API to perform CRUD operations on questions
 schemes:
   - https
-host: jlpt-app-backend.vercel.app
+# host: jlpt-app-backend.vercel.app
+host: jlpt-app-backend-jojojen.vercel.app
+
 consumes:
   - application/json
 produces:
   - application/json
 paths:
-  /feedback:
+  /question:
     post:
-      summary: Create a new feedback
+      summary: Create a new question
       parameters:
         - in: body
-          name: feedback
-          description: The feedback object to be created
+          name: question
+          description: The question object to be created
           schema:
             type: object
             required:
-              - uid
+              - _id
               - questionJSON
-              - feedback
               - explain
             properties:
-              uid:
+              _id:
                 type: string
               questionJSON:
                 type: string
-              feedback:
-                type: string
-                enum: [good, bad]
-              comment:
-                type: string
               explain:
                 type: string
+              feedbacks:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    rating:
+                      type: integer
+                      minimum: 0
+                      maximum: 1
+                    comment:
+                      type: string
       responses:
         201:
           description: Created
           schema:
-            type: object
-            properties:
-              _id:
-                type: string
-              uid:
-                type: string
-              questionJSON:
-                type: string
-              feedback:
-                type: string
-                enum: [good, bad]
-              comment:
-                type: string
-              explain:
-                type: string
+            $ref: '#/definitions/Question'
         400:
           description: Bad Request
-  /feedback/good-uids:
+
+  /question/{id}:
     get:
-      summary: Get a list of uids with good feedback
-      responses:
-        200:
-          description: A list of uids with good feedback
-          schema:
-            type: array
-            items:
-              type: string
-  /feedback/question/{uid}:
-    get:
-      summary: Get question JSON by uid
+      summary: Get question by ID
       parameters:
         - in: path
-          name: uid
+          name: id
           type: string
           required: true
-          description: The uid of the feedback
+          description: The ID of the question
       responses:
         200:
-          description: The question JSON related to the uid
+          description: The question object
+          schema:
+            $ref: '#/definitions/Question'
+        404:
+          description: Question not found
+
+    put:
+      summary: Update question by ID
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: The ID of the question
+        - in: body
+          name: question
+          description: The question object with updated fields
+          schema:
+            $ref: '#/definitions/Question'
+      responses:
+        200:
+          description: The updated question object
+          schema:
+            $ref: '#/definitions/Question'
+        400:
+          description: Bad Request
+        404:
+          description: Question not found
+
+    delete:
+      summary: Delete question by ID
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: The ID of the question
+      responses:
+        200:
+          description: Question deleted successfully
           schema:
             type: object
             properties:
-              questionJSON:
+              message:
                 type: string
         404:
-          description: Feedback not found for the provided uid
+          description: Question not found
+
+definitions:
+  Question:
+    type: object
+    properties:
+      _id:
+        type: string
+      questionJSON:
+        type: string
+      explain:
+        type: string
+      feedbacks:
+        type: array
+        items:
+          type: object
+          properties:
+            rating:
+              type: integer
+              minimum: 0
+              maximum: 1
+            comment:
+              type: string
