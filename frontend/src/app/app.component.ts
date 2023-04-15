@@ -5,6 +5,7 @@ import { FeedbackService } from './feedback.service';
 import { generateUniqueHash } from './utils';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,8 @@ export class AppComponent {
 async getQuestionFromCollection() {
 
   // const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
-  const API_BASE_URL = 'https://jlpt-app-backend-jojojen.vercel.app';
+  // const API_BASE_URL = 'https://jlpt-app-backend-jojojen.vercel.app';
+  const API_BASE_URL = environment.API_BASE_URL;
 
   this.disableSubmitFeedbackButton = false;
   this.feedbackSubmitted = false;
@@ -93,7 +95,8 @@ async getQuestionFromCollection() {
 
         // Save the generated question to the database
         // const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
-        const API_BASE_URL = 'https://jlpt-app-backend-jojojen.vercel.app';
+        // const API_BASE_URL = 'https://jlpt-app-backend-jojojen.vercel.app';
+        const API_BASE_URL = environment.API_BASE_URL;
 
         const questionData = JSON.parse(resultText);
         const questionToSave = {

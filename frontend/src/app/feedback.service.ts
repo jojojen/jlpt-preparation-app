@@ -2,15 +2,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FeedbackService {
 
-  // private apiUrl = 'http://localhost:5000/feedback';
   // private apiUrl = 'https://jlpt-app-backend.vercel.app';
-  private apiUrl = 'https://jlpt-app-backend-jojojen.vercel.app';
+  // private apiUrl = 'https://jlpt-app-backend-jojojen.vercel.app';
+  private apiUrl = environment.API_BASE_URL;
 
   constructor(private http: HttpClient) {}
 
@@ -25,7 +26,7 @@ export class FeedbackService {
       comment: feedbackData.comment
     };
     const commentUrl = `${this.apiUrl}/question/${questionId}/comment`;
-
+    console.log("commentUrl: " + commentUrl);
     return this.http.post(commentUrl, commentData);
   }
 }

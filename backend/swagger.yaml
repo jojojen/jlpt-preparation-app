@@ -6,8 +6,7 @@ info:
   description: A RESTful API to perform CRUD operations on questions
 schemes:
   - https
-# host: jlpt-app-backend.vercel.app
-host: jlpt-app-backend-jojojen.vercel.app
+host: jlpt-app-backend.vercel.app
 
 definitions:
   Question:
