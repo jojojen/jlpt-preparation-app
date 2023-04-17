@@ -6,6 +6,7 @@ import { generateUniqueHash } from './utils';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
+import { stickers } from './stickers';
 
 @Component({
   selector: 'app-root',
@@ -182,8 +183,23 @@ export class AppComponent {
   private setResultImageAndDescription(answerCorrect: boolean, randomNumber: number) {
     const rarity = randomNumber < 79 ? 'R' : randomNumber < 97 ? 'SR' : 'SSR';
     const result = answerCorrect ? '正解です！' : '残念ですが、不正解です。';
-    const resultImagePrefix = answerCorrect ? 'correct' : 'incorrect';
-    this.resultImage = `assets/feedback/${resultImagePrefix}_${rarity.toLowerCase()}.png`;
+    const resultType = answerCorrect ? 'correct' : 'incorrect';
+  
+    // Filter stickers matching the rarity and resultType
+    const matchingStickers = stickers.filter(
+      (sticker) => sticker.rarity === rarity && sticker.type === resultType
+    );
+
+    if (matchingStickers.length > 0) {
+      // Randomly pick one sticker from matching stickers
+      const randomIndex = Math.floor(Math.random() * matchingStickers.length);
+      const randomSticker = matchingStickers[randomIndex];
+      this.resultImage = randomSticker.url;
+    } else {
+      console.error('No matching sticker found');
+      this.resultImage = '';
+    }
+  
     this.resultDescription = `${result}(レアリティ:${rarity})`;
   }
 
