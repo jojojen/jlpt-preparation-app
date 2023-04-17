@@ -45,6 +45,10 @@ export class QuestionPageComponent {
 
   ngOnInit() {
     this.authService.user$.subscribe((user) => {
+      if(user) {
+        const uid = user.uid;
+        console.log("uid:" + uid);
+      }
       this.loggedIn = !!user;
     });
   }
