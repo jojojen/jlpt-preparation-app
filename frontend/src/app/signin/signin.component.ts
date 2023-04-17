@@ -1,5 +1,5 @@
 // signin.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Subscription } from 'rxjs';
@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./signin.component.css'],
 })
 export class SignInComponent implements OnInit {
+  @Output() loggedInStatus = new EventEmitter<boolean>();
+
   isLoggedIn = false;
   private authStateSubscription!: Subscription;
 
@@ -18,14 +20,13 @@ export class SignInComponent implements OnInit {
   ngOnInit() {
     this.authStateSubscription = this.afAuth.authState.subscribe((user) => {
       this.isLoggedIn = !!user;
+      this.loggedInStatus.emit(this.isLoggedIn);
     });
   }
 
   ngOnDestroy() {
-    // Unsubscribe from authState when the component is destroyed
     if (this.authStateSubscription) {
       this.authStateSubscription.unsubscribe();
     }
   }
 }
-

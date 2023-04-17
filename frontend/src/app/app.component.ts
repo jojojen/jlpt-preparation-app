@@ -32,46 +32,51 @@ export class AppComponent {
   feedbackSubmitted: boolean = false;
   disableSubmitFeedbackButton: boolean = false;
   showFeedbackComponent: boolean = false;
+  loggedIn: boolean = false;
 
   constructor(private gpt3Service: Gpt3Service, private feedbackService: FeedbackService, private http: HttpClient) {}
 
-async getQuestionFromCollection() {
-
-  // const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
-  // const API_BASE_URL = 'https://jlpt-app-backend-jojojen.vercel.app';
-  const API_BASE_URL = environment.API_BASE_URL;
-
-  this.disableSubmitFeedbackButton = false;
-  this.feedbackSubmitted = false;
-  this.showFeedbackComponent = false;
-
-  this.prepareForNewQuestion();
-
-  try {
-    const n = 10; // Number of questions to retrieve
-    const questions = await this.http.get<{ questionJSON: string }[]>(`${API_BASE_URL}/questions/top?n=${n}`).toPromise();
-    
-    if (!questions || questions.length === 0) {
-      throw new Error('No questions received');
-    }
-
-    // Log the whole question object content for each question
-    questions.forEach((question, index) => {
-      console.log(`Question ${index + 1}:`, question);
-    });
-    
-    const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-    const resultText = randomQuestion.questionJSON;
-    const result = JSON.parse(resultText);
-    if (result.error) {
-      this.handleError(result.error);
-    } else {
-      this.handleSuccess(resultText);
-    }
-  } catch (error) {
-    this.handleError((error as Error).message);
+  updateLoggedInStatus(loggedIn: boolean) {
+    this.loggedIn = loggedIn;
   }
-}
+
+  async getQuestionFromCollection() {
+
+    // const API_BASE_URL = 'https://jlpt-app-backend.vercel.app';
+    // const API_BASE_URL = 'https://jlpt-app-backend-jojojen.vercel.app';
+    const API_BASE_URL = environment.API_BASE_URL;
+
+    this.disableSubmitFeedbackButton = false;
+    this.feedbackSubmitted = false;
+    this.showFeedbackComponent = false;
+
+    this.prepareForNewQuestion();
+
+    try {
+      const n = 10; // Number of questions to retrieve
+      const questions = await this.http.get<{ questionJSON: string }[]>(`${API_BASE_URL}/questions/top?n=${n}`).toPromise();
+      
+      if (!questions || questions.length === 0) {
+        throw new Error('No questions received');
+      }
+
+      // Log the whole question object content for each question
+      questions.forEach((question, index) => {
+        console.log(`Question ${index + 1}:`, question);
+      });
+      
+      const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+      const resultText = randomQuestion.questionJSON;
+      const result = JSON.parse(resultText);
+      if (result.error) {
+        this.handleError(result.error);
+      } else {
+        this.handleSuccess(resultText);
+      }
+    } catch (error) {
+      this.handleError((error as Error).message);
+    }
+  }
 
   private handleError(errorMessage?: string) {
     this.errorMessage = errorMessage || 'Something went wrong, please try later.';

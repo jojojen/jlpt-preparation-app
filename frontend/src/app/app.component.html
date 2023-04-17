@@ -1,9 +1,9 @@
 <!-- app.component.html -->
 <div class="container">
-  <app-signin></app-signin>
+  <app-signin (loggedInStatus)="updateLoggedInStatus($event)"></app-signin>
   <button
-  [disabled]="disableGenerateQuestionButton"
-  [class.disabled]="disableGenerateQuestionButton"
+  [disabled]="disableGenerateQuestionButton || !loggedIn"
+  [class.disabled]="disableGenerateQuestionButton || !loggedIn"
   (click)="generateQuestion()">
     GPTが問題を生成する
   </button>
@@ -13,6 +13,7 @@
   (click)="getQuestionFromCollection()">
     問題集から問題を取得する
   </button>
+  <div *ngIf="!loggedIn" class="error-message">GPTから問題を生成するにはGoogleでログインしてください</div>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
     <div *ngIf="isLoading" class="loader"></div>
     <div *ngIf="question">
