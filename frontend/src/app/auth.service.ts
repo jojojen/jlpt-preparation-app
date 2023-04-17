@@ -1,3 +1,4 @@
+// auth.service.ts
 import { Injectable } from '@angular/core';
 import { AuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -8,12 +9,13 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 export class AuthService {
   constructor(
     public afAuth: AngularFireAuth // Inject Firebase auth service
-  ) {
-  }
+  ) {}
+
   // Sign in with Google
   GoogleAuth() {
     return this.AuthLogin(new GoogleAuthProvider());
   }
+
   // Auth logic to run auth providers
   AuthLogin(provider: AuthProvider) {
     return this.afAuth
@@ -25,4 +27,12 @@ export class AuthService {
         console.log(error);
       });
   }
+
+  // Sign out
+  SignOut() {
+    return this.afAuth.signOut().then(() => {
+      console.log('You have been successfully logged out!');
+    });
+  }
 }
+
