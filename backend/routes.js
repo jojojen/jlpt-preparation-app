@@ -9,6 +9,7 @@ const {
     addComment,
     getTopQuestions,
 } = require('./controllers/questionController');
+const userController = require('./controllers/userController');
 
 router.post('/question', createQuestion);
 router.get('/question/:id', getQuestion);
@@ -17,5 +18,7 @@ router.delete('/question/:id', deleteQuestion);
 
 router.post('/question/:id/comment', addComment);
 router.get('/questions/top', getTopQuestions);
+
+router.post('/user/login', userController.loginOrCreateUser);
 
 module.exports = router;

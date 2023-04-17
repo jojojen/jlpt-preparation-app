@@ -6,8 +6,8 @@ info:
   description: A RESTful API to perform CRUD operations on questions
 schemes:
   - https
-host: jlpt-app-backend.vercel.app
-
+# host: jlpt-app-backend.vercel.app
+host: jlpt-app-backend-jojojen.vercel.app
 definitions:
   Question:
     type: object
@@ -29,6 +29,22 @@ definitions:
               maximum: 1
             comment:
               type: string
+  User:
+    type: object
+    properties:
+      _id:
+        type: string
+      lastLoginDate:
+        type: string
+      serviceUsage:
+        type: object
+        properties:
+          createQuestionByGPT:
+            type: integer
+      album:
+        type: array
+        items:
+          type: string
 
 consumes:
   - application/json
@@ -184,3 +200,39 @@ paths:
               $ref: '#/definitions/Question'
         400:
           description: Bad Request
+
+  /user/login:
+    post:
+      summary: Login or create a new user
+      parameters:
+        - in: body
+          name: user
+          description: The user object to be logged in or created
+          schema:
+            type: object
+            required:
+              - _id
+            properties:
+              _id:
+                type: string
+      responses:
+        200:
+          description: Logged in or created a new user
+          schema:
+            type: object
+            properties:
+              _id:
+                type: string
+              lastLoginDate:
+                type: string
+              serviceUsage:
+                type: object
+                properties:
+                  createQuestionByGPT:
+                    type: integer
+              album:
+                type: array
+        400:
+          description: Bad Request
+        500:
+          description: Internal Server Error
