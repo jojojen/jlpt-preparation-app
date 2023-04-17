@@ -1,0 +1,36 @@
+<!-- question-page.component.html -->
+<div class="container">
+    <button
+    [disabled]="disableGenerateQuestionButton || !loggedIn"
+    [class.disabled]="disableGenerateQuestionButton || !loggedIn"
+    (click)="generateQuestion()">
+      GPTが問題を生成する
+    </button>
+    <button
+    [disabled]="disableGenerateQuestionButton"
+    [class.disabled]="disableGenerateQuestionButton"
+    (click)="getQuestionFromCollection()">
+      問題集から問題を取得する
+    </button>
+    <div *ngIf="!loggedIn" class="error-message">GPTから問題を生成するにはGoogleでログインしてください</div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+      <div *ngIf="isLoading" class="loader"></div>
+      <div *ngIf="question">
+        <p>{{ question }}</p>
+        <ol>
+          <li *ngFor="let option of options" (click)="selectAnswer(option)" [class.selected]="option.id === selectedAnswer" [class.disabled]="disableOptions">{{ option.text }}</li>
+        </ol>
+        <button *ngIf="selectedAnswer && !hideSubmitButton" [disabled]="disableSubmitAnswerButton" [class.disabled]="disableSubmitAnswerButton" (click)="submitAnswer()">回答を送信します</button>
+        <div *ngIf="isLoading" class="loader"></div>
+        <div *ngIf="showAnswer && !isLoading">
+          <img [src]="resultImage" alt="Result" />
+          <p>{{ resultDescription }}</p>
+        </div>
+        <app-feedback 
+        *ngIf="showFeedbackComponent"
+        [isLoading]="isLoading"
+        [feedbackSubmitted]="feedbackSubmitted"
+        (submitFeedback)="onSubmitFeedback($event)">
+        </app-feedback>
+    </div>
+</div>

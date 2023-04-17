@@ -1,107 +1,47 @@
-/* General styles */
+/* app.component.css */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: #333;
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+.nav-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px; /* Add padding here */
+}
+
+.nav-content {
+  max-width: 800px; /* Change max-width to 800px */
   background-color: #f9f9f9;
-  border-radius: 5px;
+  box-sizing: border-box;
 }
 
-button {
-  cursor: pointer;
-  background-color: #666b7a;
-  color: #fff;
-  border: none;
+/* Navigation styles */
+nav {
+  padding: 0; /* Remove padding from nav selector */
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav li {
+  margin-right: 1rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
   padding: 10px 20px;
-  margin: 10px 0;
   border-radius: 5px;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: #39d1b4;
-}
-
-button.disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-button.disabled:hover {
-  background-color: #666b7a;
-}
-
-/* Question and options */
-p {
-  margin: 10px 0;
-}
-
-ol {
-  list-style-type: upper-alpha;
-  padding-left: 20px;
-}
-
-li {
-  cursor: pointer;
-  padding: 10px;
-  margin: 5px 0;
   background-color: #e0e0e0;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-li:hover {
+nav a:hover {
   background-color: #d1d1d1;
-}
-
-li.disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-li.disabled:hover {
-  background-color: #e0e0e0;
-}
-
-/* Answer result */
-img {
-  max-width: 300px;
-  margin-right: 10px;
-  vertical-align: middle;
-}
-
-li.selected {
-  background-color: #39d1b4;
-  color: #fff;
-}
-
-/* Loading animation */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.loader {
-  border: 8px solid #666b7a;
-  border-top: 8px solid #39d1b4;
-  border-right: 8px solid #39d1b4;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 0.5s linear infinite;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -25px;
-  margin-top: -25px;
 }

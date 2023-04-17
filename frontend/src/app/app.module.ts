@@ -15,6 +15,9 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { SignInComponent } from './signin/signin.component';
 import { initializeApp } from "firebase/app";
+import { AlbumPageComponent } from './album-page/album-page.component';
+import { QuestionPageComponent } from './question-page/question-page.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,8 @@ import { initializeApp } from "firebase/app";
     FeedbackComponent,
     FooterComponent,
     SignInComponent,
+    AlbumPageComponent,
+    QuestionPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,6 +34,7 @@ import { initializeApp } from "firebase/app";
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
+    AppRoutingModule,
   ],
   providers: [FeedbackService, AuthService],
   bootstrap: [AppComponent]
