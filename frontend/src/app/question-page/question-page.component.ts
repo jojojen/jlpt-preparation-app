@@ -73,7 +73,8 @@ export class QuestionPageComponent {
 
     try {
       const n = 10; // Number of questions to retrieve
-      const questions = await this.http.get<{ questionJSON: string }[]>(`${API_BASE_URL}/questions/top?n=${n}`).toPromise();
+      const questions = await this.http.get<Question[]>(`${API_BASE_URL}/questions/random?n=${n}`).toPromise();
+      // const questions = await this.http.get<{ questionJSON: string }[]>(`${API_BASE_URL}/questions/random?n=${n}`).toPromise();
       
       if (!questions || questions.length === 0) {
         throw new Error('No questions received');
@@ -84,8 +85,17 @@ export class QuestionPageComponent {
         console.log(`Question ${index + 1}:`, question);
       });
       
-      const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-      const resultText = randomQuestion.questionJSON;
+      // const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+      // const resultText = randomQuestion.questionJSON;
+
+      const questionWithHighestPositiveFeedback = questions.reduce((prev, current) => {
+        const prevPositiveFeedbacks = prev.feedbacks.filter((feedback) => feedback.rating === 1).length;
+        const currentPositiveFeedbacks = current.feedbacks.filter((feedback) => feedback.rating === 1).length;
+  
+        return prevPositiveFeedbacks >= currentPositiveFeedbacks ? prev : current;
+      });
+  
+      const resultText = questionWithHighestPositiveFeedback.questionJSON;
       const result = JSON.parse(resultText);
       if (result.error) {
         this.handleError(result.error);
@@ -264,4 +274,15 @@ export class QuestionPageComponent {
       }
     );
   }
+}
+
+// Add the interface definition within the same file as the AppComponent class
+interface Question {
+  _id: string;
+  questionJSON: string;
+  explain: string;
+  feedbacks: {
+    rating: number;
+    comment: string;
+  }[];
 }

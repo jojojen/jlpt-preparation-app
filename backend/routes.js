@@ -1,22 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const {
-    getQuestion,
-    createQuestion,
-    updateQuestion,
-    deleteQuestion,
-    addComment,
-    getTopQuestions,
-} = require('./controllers/questionController');
+const questionController = require('./controllers/questionController');
 const userController = require('./controllers/userController');
 
-router.post('/question', createQuestion);
-router.get('/question/:id', getQuestion);
-router.put('/question/:id', updateQuestion);
-router.delete('/question/:id', deleteQuestion);
+router.post('/question', questionController.createQuestion);
+router.get('/question/:id', questionController.getQuestion);
+router.put('/question/:id', questionController.updateQuestion);
+router.delete('/question/:id', questionController.deleteQuestion);
 
-router.post('/question/:id/comment', addComment);
-router.get('/questions/top', getTopQuestions);
+router.post('/question/:id/comment', questionController.addComment);
+router.get('/questions/top', questionController.getTopQuestions);
+router.get('/questions/random', questionController.getRandomQuestions);
 
 router.post('/user/login', userController.loginOrCreateUser);
 

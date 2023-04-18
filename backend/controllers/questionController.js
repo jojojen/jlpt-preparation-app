@@ -91,11 +91,32 @@ const getTopQuestions = async (req, res) => {
   }
 };
 
+const getRandomQuestions = async (req, res) => {
+  const n = parseInt(req.query.n);
+
+  if (isNaN(n) || n <= 0) {
+    return res.status(400).json({ message: 'Invalid value for parameter "n"' });
+  }
+
+  try {
+    const randomQuestions = await Question.aggregate([
+      { $match: { 'feedbacks.rating': 1 } },
+      { $sample: { size: n } },
+    ]);
+
+    res.status(200).json(randomQuestions);
+  } catch (error) {
+    res.status(500).json({ message: 'Error while retrieving random questions', error });
+  }
+};
+
+
 module.exports = {
   getQuestion,
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  getRandomQuestions,
+  getTopQuestions,
   addComment,
-  getTopQuestions
 };
