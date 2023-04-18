@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,8 @@ export class AuthService {
   user$: Observable<any>;
 
   constructor(
-    public afAuth: AngularFireAuth // Inject Firebase auth service
+    public afAuth: AngularFireAuth, // Inject Firebase auth service
+    private http: HttpClient
   ) {
     this.user$ = afAuth.authState;
   }
@@ -38,5 +40,10 @@ export class AuthService {
     return this.afAuth.signOut().then(() => {
       console.log('You have been successfully logged out!');
     });
+  }
+
+  // Add this method to get user data from the API
+  getUserData(uid: string): Observable<any> {
+    return this.http.get(`https://jlpt-app-backend-jojojen.vercel.app/user/${uid}`);
   }
 }

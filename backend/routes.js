@@ -1,4 +1,3 @@
-// routes.js
 const express = require('express');
 const router = express.Router();
 const {
@@ -20,5 +19,10 @@ router.post('/question/:id/comment', addComment);
 router.get('/questions/top', getTopQuestions);
 
 router.post('/user/login', userController.loginOrCreateUser);
+
+// user
+router.get('/user/:id', userController.getUser);
+router.put('/user/:id', userController.updateUser);
+router.delete('/user/:id', userController.deleteUser);
 
 module.exports = router;
