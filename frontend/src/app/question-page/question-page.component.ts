@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { stickers } from 'src/app/stickers';
 import { AuthService } from 'src/app/auth.service';
+// Add this import at the top of the file
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-question-page',
@@ -196,7 +198,7 @@ export class QuestionPageComponent {
   }
 
   // Set result image and description based on answer correctness and a random number
-  private setResultImageAndDescription(answerCorrect: boolean, randomNumber: number) {
+  private async setResultImageAndDescription(answerCorrect: boolean, randomNumber: number) {
     const rarity = randomNumber < 79 ? 'R' : randomNumber < 97 ? 'SR' : 'SSR';
     const result = answerCorrect ? '正解です！' : '残念ですが、不正解です。';
     const resultType = answerCorrect ? 'correct' : 'incorrect';
@@ -205,19 +207,39 @@ export class QuestionPageComponent {
     const matchingStickers = stickers.filter(
       (sticker) => sticker.rarity === rarity && sticker.type === resultType
     );
-
+  
     if (matchingStickers.length > 0) {
       // Randomly pick one sticker from matching stickers
       const randomIndex = Math.floor(Math.random() * matchingStickers.length);
       const randomSticker = matchingStickers[randomIndex];
       this.resultImage = randomSticker.url;
+
+      // update album
+      if (this.loggedIn) {
+        try {
+          const user = await this.authService.user$.pipe(first()).toPromise();
+          const userData = await this.authService.getUserData(user.uid).toPromise();
+          const stickerInAlbum = userData.album.includes(randomSticker.name);
+    
+          if (!stickerInAlbum) {
+            // Update user's album
+            userData.album.push(randomSticker.name);
+            await this.authService.updateUserData(user.uid, userData).toPromise();
+            console.log('Sticker added to user album:', randomSticker.name);
+          }
+        } catch (error) {
+          console.error('Error updating user album:', error);
+        }
+      }
     } else {
       console.error('No matching sticker found');
       this.resultImage = '';
     }
   
     this.resultDescription = `${result}(レアリティ:${rarity})`;
+  
   }
+  
 
   onSubmitFeedback(feedbackData: { feedback: 'good' | 'bad'; comment: string }) {
     this.isLoading = true;

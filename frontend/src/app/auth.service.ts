@@ -46,4 +46,10 @@ export class AuthService {
   getUserData(uid: string): Observable<any> {
     return this.http.get(`https://jlpt-app-backend-jojojen.vercel.app/user/${uid}`);
   }
+
+  // auth.service.ts
+  updateUserData(uid: string, data: any): Observable<any> {
+    return this.http.put(`https://jlpt-app-backend-jojojen.vercel.app/user/${uid}`, data);
+  }
+
 }
