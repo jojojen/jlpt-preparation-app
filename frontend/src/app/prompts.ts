@@ -1,6 +1,6 @@
 export const prompts = [
     {
-      prompt: `As a professional japanese turtor AI proficient in JLPT questions and having extensive experience in teaching Japanese, please create ONE test question for understanding everyday Japanese conversation, following these conditions:
+      prompt: `As a professional japanese tutor AI proficient in JLPT questions and having extensive experience in teaching Japanese, please create ONE test question for understanding everyday Japanese conversation, following these conditions:
 
       1. Do not use the words in the question directly in the options.
       2. Of the two choices, one should conform to common sense and grammar, while the other should clearly feel out of place when considering common sense or grammar.
@@ -23,7 +23,7 @@ export const prompts = [
       `
     },
     {
-      prompt: `As a professional japanese turtor AI proficient in JLPT questions and having extensive experience in teaching Japanese, please create ONE test question for understanding everyday Japanese conversation, following these conditions:
+      prompt: `As a professional japanese tutor AI proficient in JLPT questions and having extensive experience in teaching Japanese, please create ONE test question for understanding everyday Japanese conversation, following these conditions:
 
       1. Do not use the words in the question directly in the options.
       2. Of the two choices, one should conform to common sense and grammar, while the other should clearly feel out of place when considering common sense or grammar.
@@ -45,7 +45,7 @@ export const prompts = [
       }`
     },
     {
-      prompt: `As a professional japanese turtor AI proficient in JLPT questions and having extensive experience in teaching Japanese, please create ONE test question for understanding everyday Japanese conversation, following these conditions:
+      prompt: `As a professional japanese tutor AI proficient in JLPT questions and having extensive experience in teaching Japanese, please create ONE test question for understanding everyday Japanese conversation, following these conditions:
 
       1. Do not use the words in the question directly in the options.
       2. Of the two choices, one should conform to common sense and grammar, while the other should clearly feel out of place when considering common sense or grammar.
