@@ -4,12 +4,17 @@ import { AuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   user$: Observable<any>;
+
+  // private apiUrl = 'https://jlpt-app-backend.vercel.app';
+  // private apiUrl = 'https://jlpt-app-backend-jojojen.vercel.app';
+  private apiUrl = environment.API_BASE_URL;
 
   constructor(
     public afAuth: AngularFireAuth, // Inject Firebase auth service
@@ -44,12 +49,16 @@ export class AuthService {
 
   // Add this method to get user data from the API
   getUserData(uid: string): Observable<any> {
-    return this.http.get(`https://jlpt-app-backend-jojojen.vercel.app/user/${uid}`);
+    const commentUrl = `${this.apiUrl}/user/${uid}`;
+    console.log("commentUrl: " + commentUrl);
+    return this.http.get(commentUrl);
   }
 
   // auth.service.ts
   updateUserData(uid: string, data: any): Observable<any> {
-    return this.http.put(`https://jlpt-app-backend-jojojen.vercel.app/user/${uid}`, data);
+    const commentUrl = `${this.apiUrl}/user/${uid}`;
+    console.log("commentUrl: " + commentUrl);
+    return this.http.put(commentUrl, data);
   }
 
 }
