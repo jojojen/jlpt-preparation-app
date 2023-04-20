@@ -1,7 +1,9 @@
+// gpt-3.service.ts
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { environment } from '../environments/environment.openai';
 import { prompts } from './prompts';
+import { JsonExtractorService } from './json-extractor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class Gpt3Service {
   private selectedPromptIndex = Math.floor(Math.random() * prompts.length);
   private selectedPrompt: string = prompts[this.selectedPromptIndex].prompt;
 
-  constructor() {}
+  constructor(private jsonExtractor: JsonExtractorService) {}
 
   async callGpt3Api(): Promise<{resultText: string, error: string}> {
     try {
@@ -24,7 +26,7 @@ export class Gpt3Service {
           max_tokens: 300,
           n: 1,
           stop: null,
-          temperature: 0.5,
+          temperature: 0.7,
         },
         {
           headers: {
@@ -33,17 +35,16 @@ export class Gpt3Service {
           },
         }
       );
-  
+
       if (response.data.choices && response.data.choices.length > 0) {
         const choice = response.data.choices[0];
         console.log('GPT-3 response text:', choice.text);
-        let parsedText;
-        try {
-          parsedText = JSON.parse(choice.text);
-          return { resultText: JSON.stringify(parsedText), error: '' };
-        } catch (error) {
-          console.error('Error fetching GPT-3 response:', error);
-          return { resultText: '', error: (error as Error).message };
+        const extractedJson = this.jsonExtractor.extractJson(choice.text);
+        if (extractedJson) {
+          return { resultText: JSON.stringify(extractedJson), error: '' };
+        } else {
+          console.error('Error fetching GPT-3 response: Unable to extract JSON');
+          return { resultText: '', error: 'Unable to extract JSON' };
         }
       }
     } catch (error) {
