@@ -1,28 +1,30 @@
 <!-- album-page.component.html -->
 <div class="container">
-    <div *ngIf="!loggedIn" class="login-message">Please log in with google to see your album.</div>
+  <div *ngIf="!loggedIn" class="login-message">Please log in with google to see your album.</div>
+</div>
+<div *ngIf="loggedIn">
+  <h1>My Album</h1>
+  <div *ngIf="!selectedSticker" class="outer-sticker-container">
+      <div class="sticker-container">
+          <ng-container *ngFor="let stickerName of userAlbum">
+              <img
+                  *ngIf="getStickerUrl(stickerName) as stickerUrl"
+                  [src]="stickerUrl"
+                  [alt]="stickerName"
+                  class="sticker-image"
+                  (click)="selectSticker(stickerName)"
+              />
+          </ng-container>
+      </div>
   </div>
-  <div *ngIf="loggedIn">
-    <h1>My Album</h1>
-    <div *ngIf="!selectedSticker" class="sticker-container">
-      <ng-container *ngFor="let stickerName of userAlbum">
-        <img
-          *ngIf="getStickerUrl(stickerName) as stickerUrl"
-          [src]="stickerUrl"
-          [alt]="stickerName"
-          class="sticker-image"
-          (click)="selectSticker(stickerName)"
-        />
-      </ng-container>
-    </div>
-    <div *ngIf="selectedSticker">
+  <div *ngIf="selectedSticker">
       <img
-        *ngIf="getStickerUrl(selectedSticker) as stickerUrl"
-        [src]="stickerUrl"
-        [alt]="selectedSticker"
-        class="full-size-image"
+          *ngIf="getStickerUrl(selectedSticker) as stickerUrl"
+          [src]="stickerUrl"
+          [alt]="selectedSticker"
+          class="full-size-image"
       />
       <button (click)="deselectSticker()">Go Back</button>
-    </div>
   </div>
+</div>
   
