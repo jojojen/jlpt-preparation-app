@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { filter, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -23,22 +24,38 @@ export class AuthService {
     this.user$ = afAuth.authState;
   }
 
-  // Sign in with Google
-  GoogleAuth() {
-    return this.AuthLogin(new GoogleAuthProvider());
-  }
+// Sign in with Google and call loginOrCreateUser
+GoogleAuth() {
+  return this.AuthLogin(new GoogleAuthProvider());
+}
 
-  // Auth logic to run auth providers
-  AuthLogin(provider: AuthProvider) {
-    return this.afAuth
-      .signInWithPopup(provider)
-      .then((result) => {
-        console.log('You have been successfully logged in!');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+// Auth logic to run auth providers
+async AuthLogin(provider: AuthProvider) {
+  try {
+    const result = await this.afAuth.signInWithPopup(provider);
+    console.log('You have been successfully logged in!');
+    this.user$.pipe(
+      filter((user: any) => !!user),
+      take(1)
+    ).subscribe(async (user: any) => {
+      const uid = user.uid;
+      try {
+        await this.loginOrCreateUser(uid).toPromise();
+      } catch (error) {
+        console.error('Error in loginOrCreateUser:', error);
+      }
+    });
+  } catch (error) {
+    console.log(error);
   }
+}
+
+// Call the loginOrCreateUser API endpoint
+loginOrCreateUser(uid: string): Observable<any> {
+  const loginUrl = `${this.apiUrl}/user/login`;
+  return this.http.post(loginUrl, { _id: uid });
+}
+
 
   // Sign out
   SignOut() {
