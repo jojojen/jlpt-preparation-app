@@ -8,7 +8,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { stickers } from 'src/app/stickers';
 import { AuthService } from 'src/app/auth.service';
-// Add this import at the top of the file
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -37,6 +36,7 @@ export class QuestionPageComponent {
   disableSubmitFeedbackButton: boolean = false;
   showFeedbackComponent: boolean = false;
   loggedIn: boolean = false;
+  showAnswerExplain: boolean = false;
 
   constructor(
     private gpt3Service: Gpt3Service,
@@ -81,9 +81,9 @@ export class QuestionPageComponent {
       }
 
       // Log the whole question object content for each question
-      questions.forEach((question, index) => {
-        console.log(`Question ${index + 1}:`, question);
-      });
+      // questions.forEach((question, index) => {
+      //   console.log(`Question ${index + 1}:`, question);
+      // });
       
       // const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
       // const resultText = randomQuestion.questionJSON;
@@ -97,6 +97,9 @@ export class QuestionPageComponent {
   
       const resultText = questionWithHighestPositiveFeedback.questionJSON;
       const result = JSON.parse(resultText);
+
+      console.log("resultText: " + resultText);
+
       if (result.error) {
         this.handleError(result.error);
       } else {
@@ -183,7 +186,7 @@ export class QuestionPageComponent {
     this.questionAll = resultText;
     this.question = result.text;
     this.options = result.options;
-    this.explain = result.expalain;
+    this.explain = result.explain;
     this.correctAnswer = result.answer;
     this.isLoading = false;
     this.disableOptions = false;
@@ -196,6 +199,7 @@ export class QuestionPageComponent {
     this.isLoading = true;
     this.disableSubmitAnswerButton = false;
     this.disableOptions = true;
+    this.showAnswerExplain = false;
   }
 
   // Evaluate the selected answer
@@ -205,6 +209,7 @@ export class QuestionPageComponent {
     const randomNumber = Math.random() * 100;
     this.setResultImageAndDescription(answerCorrect, randomNumber);
     this.disableGenerateQuestionButton = false;
+    this.showAnswerExplain = true;
   }
 
   // Set result image and description based on answer correctness and a random number

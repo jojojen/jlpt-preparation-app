@@ -26,6 +26,9 @@
           <img [src]="resultImage" alt="Result" />
           <p>{{ resultDescription }}</p>
         </div>
+        <div *ngIf="showAnswerExplain && !isLoading">
+          <p>{{ explain }}</p>
+        </div>
         <app-feedback 
         *ngIf="showFeedbackComponent"
         [isLoading]="isLoading"
