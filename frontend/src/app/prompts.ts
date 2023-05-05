@@ -6,6 +6,7 @@ const sharedPrompt = `As a professional japanese tutor AI proficient in JLPT que
 4. The distinction between the choices should be clear.
 5. The options should include context-appropriate content.
 6. Include context-providing surrounding text.
+7. Please provide an answer that does not exceed 50 words in total.
 
 Finally, format your response as a JSON object, as shown in the example below:`;
 
@@ -34,11 +35,16 @@ export const prompts = [
         {"id": "A", "text": "だけなら"},
         {"id": "B", "text": "だけは"}
       ],
-      "expalain": "この場合、「だけは」は、他の誰もが反対していた中で、彼女だけが自分を支持してくれたという強い意味合いがあります。一方、「だけなら」は「only if」という意味で、条件を表します。この文脈では「だけは」の方がより適切です。したがって、正解はB、「だけは」です。",
+      "explain": "この場合、「だけは」は、他の誰もが反対していた中で、彼女だけが自分を支持してくれたという強い意味合いがあります。一方、「だけなら」は「only if」という意味で、条件を表します。この文脈では「だけは」の方がより適切です。したがって、正解はB、「だけは」です。",
       "answer": "B"
     }
     
     `
   }
 ];
-  
+
+/*
+經過計算，範例1 prompt文字大約包含213個tokens。
+您的max_tokens設置為300，因此您希望AI生成的回答不超過87個tokens。
+87個tokens大約對應43個日語或英語單詞（因為每個單詞和標點符號一般都被視為一個token）。
+*/

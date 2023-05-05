@@ -178,6 +178,7 @@ export class QuestionPageComponent {
     this.hideSubmitButton = false;
     this.resultImage = '';
     this.selectedAnswer = '';
+    this.showAnswerExplain = false;
   }
 
   // Handle successful API response

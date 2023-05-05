@@ -23,7 +23,7 @@ export class Gpt3Service {
         'https://api.openai.com/v1/engines/text-davinci-003/completions',
         {
           prompt: this.selectedPrompt,
-          max_tokens: 300,
+          max_tokens: 320,
           n: 1,
           stop: null,
           temperature: 0.7,
