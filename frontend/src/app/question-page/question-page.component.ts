@@ -72,7 +72,7 @@ export class QuestionPageComponent {
     this.prepareForNewQuestion();
 
     try {
-      const n = 10; // Number of questions to retrieve
+      const n = 5; // Number of questions to retrieve
       const questions = await this.http.get<Question[]>(`${API_BASE_URL}/questions/random?n=${n}`).toPromise();
       // const questions = await this.http.get<{ questionJSON: string }[]>(`${API_BASE_URL}/questions/random?n=${n}`).toPromise();
       
