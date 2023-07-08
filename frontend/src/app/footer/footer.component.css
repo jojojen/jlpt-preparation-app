@@ -28,3 +28,10 @@
       flex-wrap: wrap;
     }
   }
+
+  .powered-by-openai {
+    font-size: 16px;
+    margin-top: 10px;
+    /* Other styles as per your design */
+  }
+  
