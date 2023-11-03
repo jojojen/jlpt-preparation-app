@@ -1,6 +1,6 @@
 // question-page/question-page.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Gpt3Service } from 'src/app/gpt-3.service';
+import { Gpt4Service } from 'src/app/gpt-4.service';
 import { FeedbackService } from 'src/app/feedback.service';
 import { generateUniqueHash } from 'src/app/utils';
 import { FeedbackComponent } from 'src/app/feedback/feedback.component';
@@ -39,7 +39,7 @@ export class QuestionPageComponent {
   showAnswerExplain: boolean = false;
 
   constructor(
-    private gpt3Service: Gpt3Service,
+    private gpt4Service: Gpt4Service,
     private feedbackService: FeedbackService,
     private http: HttpClient,
     private authService: AuthService
@@ -124,7 +124,7 @@ export class QuestionPageComponent {
     this.prepareForNewQuestion();
 
     try {
-      const { resultText, error } = await this.gpt3Service.callGpt3Api();
+      const { resultText, error } = await this.gpt4Service.callGpt4Api();
       if (error) {
         this.handleError();
       } else {
